@@ -113,3 +113,10 @@ deploy:
   type: git
   repo: git@github.com:Shirolin/Shirolin.github.io.git
   branch: gh-pages
+
+
+social:
+  fab fa-github: https://github.com/Shirolin || Github || "#hdhfbb"
+  fas fa-envelope: mailto:shirolin.com@gmail.com || Email || "#000000"
+
+top_img: false
