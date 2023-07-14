@@ -3,17 +3,17 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle: ''
-description: ''
+title: 希落凛
+subtitle: '希落凛の個人サイト'
+description: '個人サイト'
 keywords:
-author: John Doe
-language: en
+author: Shirolin
+language: zh-CN
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: https://shirolin.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
