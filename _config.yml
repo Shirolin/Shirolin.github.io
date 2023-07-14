@@ -104,4 +104,4 @@ theme: landscape
 deploy:
   type: git
   repo: git@github.com:Shirolin/Shirolin.github.io.git
-  branch: master
+  branch: gh-pages
