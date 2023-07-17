@@ -40,7 +40,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
@@ -51,7 +51,7 @@ highlight:
   wrap: true
   hljs: false
 prismjs:
-  enable: false
+  enable: true
   preprocess: true
   line_number: true
   tab_replace: ''
@@ -119,4 +119,34 @@ social:
   fab fa-github: https://github.com/Shirolin || Github || "#hdhfbb"
   fas fa-envelope: mailto:shirolin.com@gmail.com || Email || "#000000"
 
-top_img: false
+disable_top_img: true
+marked:
+  prependRoot: true
+  postAsset: true
+
+# 搜索
+search: 
+  path: search.xml;
+  field: post;
+
+# 文章字数统计插件
+post_wordcount:
+  date: true # 发布日期
+  update: true # 更新日期
+  wordCount: true # 文章字数统计
+  totalCount: true # 站点总文章字数
+  min2read: true # 文章阅读时长
+  readCount: true # 文章阅读次数
+
+# 中文链接转拼音
+# permalink_pinyin:
+#   enable: true
+#   separator: '-' # default: '-'
+
+# emoji表情支持
+githubEmojis:
+  enable: true
+  className: github-emoji
+  inject: true
+  styles:
+  customEmojis:
