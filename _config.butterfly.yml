@@ -35,16 +35,20 @@ code_word_wrap: false
 social:
   # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
   # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+  fab fa-github: https://github.com/Shirolin || Github || '#24292e'
+  fas fa-envelope: mailto:shirolin.com@gmail.com || Email || '#4a7dbe'
 
 # Image (圖片設置)
 # --------------------------------------
 
 # Favicon（網站圖標）
-favicon: /img/favicon.png
+# favicon: /img/favicon.png
+favicon: /img/avatar.png
 
 # Avatar (頭像)
 avatar:
-  img: https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png
+  # img: https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png
+  img: /img/avatar.png
   effect: false
 
 # Disable all banner image
@@ -54,7 +58,7 @@ disable_top_img: false
 index_img:
 
 # If the banner of page not setting, it will show the top_img
-default_top_img:
+default_top_img: /img/xenoblade3.webp
 
 # The banner image of archive page
 archive_img:
