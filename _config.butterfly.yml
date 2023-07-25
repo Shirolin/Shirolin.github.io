@@ -35,10 +35,10 @@ code_word_wrap: false
 social:
   # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
   # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
-  fab fa-github: https://github.com/Shirolin || Github || '#24292e'
-  fas fa-envelope: mailto:shirolin.com@gmail.com || Email || '#4a7dbe'
-  fa-brands fa-qq:  tencent://message/?uin=316890028 || QQ || '#4a7dbe'
-  fa-brands fa-weibo: linwangzhe@qq.com || Weibo || '#4a7dbe'
+  fab fa-github: https://github.com/Shirolin || Github || '#0d8686'
+  fas fa-envelope: mailto:shirolin.com@gmail.com || Email || '#0d8686'
+  fa-brands fa-qq:  tencent://message/?uin=316890028 || QQ || '#0d8686'
+  fa-brands fa-weibo: linwangzhe@qq.com || Weibo || '#0d8686'
 
 # Image (圖片設置)
 # --------------------------------------
@@ -649,7 +649,8 @@ tag_ui: # 留空或 index
 background:
 
 # Footer Background
-footer_bg: false
+# footer_bg: false
+footer_bg: /img/xenoblade3.webp
 
 # Add mask to header or footer (为 header 或 footer 添加黑色半透遮罩)
 mask:
