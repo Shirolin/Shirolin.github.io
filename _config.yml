@@ -110,8 +110,8 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 # theme: false
-theme: landscape
-# theme: butterfly
+# theme: landscape
+theme: butterfly
 # remote_theme: pages-themes/minimal@v0.2.0
 # theme: jekyll-theme-minimal
 
