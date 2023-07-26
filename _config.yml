@@ -110,15 +110,16 @@ ignore:
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 # theme: landscape
-# theme: butterfly
-remote_theme: pages-themes/minimal@v0.2.0
+theme: butterfly
+# remote_theme: pages-themes/minimal@v0.2.0
 # theme: jekyll-theme-minimal
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: git@github.com:Shirolin/Shirolin.github.io.git
+  repo: https://github.com/Shirolin/Shirolin.github.io.git
+  # repo: git@github.com:Shirolin/Shirolin.github.io.git
   branch: gh-pages
 
 # abbrlink config
