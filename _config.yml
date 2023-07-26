@@ -111,8 +111,8 @@ ignore:
 ## Themes: https://hexo.io/themes/
 # theme: landscape
 # theme: butterfly
-# remote_theme: pages-themes/minimal@v0.2.0
-theme: jekyll-theme-minimal
+remote_theme: pages-themes/minimal@v0.2.0
+# theme: jekyll-theme-minimal
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
