@@ -1,5 +1,6 @@
 ---
 title: centos 安装高版本zsh
+abbrlink: d7590978
 date: 2023-07-27 11:30:46
 tags:
 ---
