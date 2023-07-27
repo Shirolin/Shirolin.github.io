@@ -566,15 +566,7 @@ messenger:
 
 # Baidu Analytics
 # https://tongji.baidu.com/web/welcome/login
-baidu_analytics: '<script>
-var _hmt = _hmt || [];
-(function() {
-  var hm = document.createElement("script");
-  hm.src = "https://hm.baidu.com/hm.js?0026a02b4775efd578ec7edc9f9fc627";
-  var s = document.getElementsByTagName("script")[0]; 
-  s.parentNode.insertBefore(hm, s);
-})();
-</script>'
+baidu_analytics:
 
 
 # Google Analytics
