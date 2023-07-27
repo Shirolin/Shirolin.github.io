@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@adobe/css-tools@^4.0.1":
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/@adobe/css-tools/-/css-tools-4.2.0.tgz"
+  integrity sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==
+
 "@babel/helper-string-parser@^7.22.5":
   version "7.22.5"
   resolved "https://registry.npmjs.org/@babel/helper-string-parser/-/helper-string-parser-7.22.5.tgz"
@@ -919,6 +924,14 @@ hexo-renderer-stylus@^2.1.0:
     nib "^1.2.0"
     stylus "^0.57.0"
 
+hexo-renderer-stylus@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/hexo-renderer-stylus/-/hexo-renderer-stylus-3.0.0.tgz"
+  integrity sha512-wgKOcjUzq1i4Y70luoyYDbh91QeQcDzJO+v1598LgY+IdREFAm+vy1MWtl/TZsVXyPaEtsULNi3Vi22hdsPUSA==
+  dependencies:
+    nib "^1.2.0"
+    stylus "^0.59.0"
+
 hexo-server@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/hexo-server/-/hexo-server-3.0.0.tgz"
@@ -932,6 +945,14 @@ hexo-server@^3.0.0:
     open "^8.0.9"
     picocolors "^1.0.0"
     serve-static "^1.14.1"
+
+hexo-theme-butterfly@^4.9.0:
+  version "4.9.0"
+  resolved "https://registry.npmjs.org/hexo-theme-butterfly/-/hexo-theme-butterfly-4.9.0.tgz"
+  integrity sha512-/aWtJJm90s/Z8RnnJm3U1wH05KTNtUz49TS7Wk8ItPRt2L4+tSIh1h7PPslwEJ5YpNfQH9DUZ7eHf4SzBIQj1w==
+  dependencies:
+    hexo-renderer-pug "^3.0.0"
+    hexo-renderer-stylus "^3.0.0"
 
 hexo-theme-landscape@^1.0.0:
   version "1.0.0"
@@ -1865,6 +1886,17 @@ stylus@*, stylus@^0.57.0:
     debug "^4.3.2"
     glob "^7.1.6"
     safer-buffer "^2.1.2"
+    sax "~1.2.4"
+    source-map "^0.7.3"
+
+stylus@^0.59.0:
+  version "0.59.0"
+  resolved "https://registry.npmjs.org/stylus/-/stylus-0.59.0.tgz"
+  integrity sha512-lQ9w/XIOH5ZHVNuNbWW8D822r+/wBSO/d6XvtyHLF7LW4KaCIDeVbvn5DF8fGCJAUCwVhVi/h6J0NUcnylUEjg==
+  dependencies:
+    "@adobe/css-tools" "^4.0.1"
+    debug "^4.3.2"
+    glob "^7.1.6"
     sax "~1.2.4"
     source-map "^0.7.3"
 
