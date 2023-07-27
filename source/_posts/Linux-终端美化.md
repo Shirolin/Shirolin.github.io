@@ -1,5 +1,6 @@
 ---
 title: Linux 终端美化
+abbrlink: b0c9ad69
 date: 2023-07-27 13:26:33
 tags:
 ---
