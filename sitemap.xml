@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://shirolin.github.io/posts/b0c9ad69/</loc>
+    
+    <lastmod>2023-07-27</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://shirolin.github.io/posts/d7590978/</loc>
     
     <lastmod>2023-07-27</lastmod>
@@ -38,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://shirolin.github.io/tags/index.html</loc>
+    <loc>https://shirolin.github.io/categories/index.html</loc>
     
     <lastmod>2023-07-25</lastmod>
     
@@ -47,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://shirolin.github.io/categories/index.html</loc>
+    <loc>https://shirolin.github.io/tags/index.html</loc>
     
     <lastmod>2023-07-25</lastmod>
     
