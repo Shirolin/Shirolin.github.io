@@ -443,9 +443,9 @@ livere:
 gitalk:
   client_id: 934dbcb9cd203864da23
   client_secret: 1a210437c429e706c023d40994dc1d48782e9acb
-  repo:
-  owner:
-  admin:
+  repo: Shirolin.github.io
+  owner: Shirolin
+  admin: ['Shirolin']
   option:
 
 # valine
