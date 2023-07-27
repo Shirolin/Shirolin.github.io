@@ -566,19 +566,12 @@ messenger:
 
 # Baidu Analytics
 # https://tongji.baidu.com/web/welcome/login
-baidu_analytics:
+baidu_analytics: 0026a02b4775efd578ec7edc9f9fc627
 
 
 # Google Analytics
 # https://analytics.google.com/analytics/web/
-google_analytics: '<script async src="https://www.googletagmanager.com/gtag/js?id=G-1YK7SHGXTR"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag("js", new Date());
-
-  gtag("config", "G-1YK7SHGXTR");
-</script>'
+google_analytics: G-1YK7SHGXTR
 
 # Cloudflare Analytics
 # https://www.cloudflare.com/zh-tw/web-analytics/
