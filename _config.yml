@@ -41,7 +41,7 @@ external_link:
   exclude: ''
 filename_case: 0
 render_drafts: false
-post_asset_folder: false
+post_asset_folder: true
 relative_link: false
 future: true
 highlight:
@@ -60,6 +60,11 @@ prismjs:
   line_number: true
   line_threshold: 0
   tab_replace: ''
+
+# 使用 Markdown 嵌入图片
+marked:
+  prependRoot: true
+  postAsset: true
 
 
 # Home page setting
