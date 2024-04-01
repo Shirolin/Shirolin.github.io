@@ -147,3 +147,6 @@ https://github.com/laishulu/Sarasa-Term-SC-Nerd/releases/download/v1.1.0/sarasa-
 
 ## 10. 完成
 至此，Windows Terminal的美化、易用化改造完成。
+
+效果如下：
+![效果](windows终端.webp)
