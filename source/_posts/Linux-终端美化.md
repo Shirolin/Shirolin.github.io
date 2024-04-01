@@ -57,3 +57,6 @@ chsh -s /usr/local/bin/zsh
 
 ## 5.结束
 至此，终端美化完成。
+
+效果如下：
+![效果](ubuntu终端.webp)
