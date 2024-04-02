@@ -2,7 +2,11 @@
 title: centos 安装高版本zsh
 abbrlink: d7590978
 date: 2023-07-27 11:30:46
-tags:
+categories: 技术文
+tags: 
+- CentOS
+- Linux
+- zsh
 ---
 Centos自带的yum源中，zsh已长期停留在5.0版本，而目前最新版本已经到了5.9，所以需要手动安装高版本的zsh。
 

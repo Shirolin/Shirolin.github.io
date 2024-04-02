@@ -2,7 +2,9 @@
 title: Hexo常用命令
 abbrlink: 33f59116
 date: 2023-07-25 16:35:51
-tags:
+categories: 技术文
+tags: 
+- Hexo
 ---
 记录一下hexo常用命令。
 须在已安装hexo的环境下执行。

@@ -1,6 +1,10 @@
 ---
 title: 尝试用Hexo搭建博客
 abbrlink: 52028
+date: 2023-12-18 16:15:45
+categories: 技术文
+tags: 
+- Hexo
 ---
 第一篇博客，用来记录Hexo的搭建过程。
 

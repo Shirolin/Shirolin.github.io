@@ -2,7 +2,11 @@
 title: Linux安装nvm与node.js
 abbrlink: ed80609d
 date: 2023-07-30 15:45:26
-tags:
+categories: 技术文
+tags: 
+- Linux
+- nvm
+- node
 ---
 记录一下安装nvm的过程。
 平台：CentOS7 | Ubuntu 20.04

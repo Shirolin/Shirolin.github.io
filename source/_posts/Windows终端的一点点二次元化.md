@@ -2,7 +2,10 @@
 title: Windows终端的一点点二次元化
 abbrlink: 5bc9bf5
 date: 2024-04-01 17:49:28
-tags:
+categories: 技术文
+tags: 
+- Windows
+- 美化
 ---
 
 在此前的文章中，我们已经进行了Windows Terminal终端的美化、易用化改造，

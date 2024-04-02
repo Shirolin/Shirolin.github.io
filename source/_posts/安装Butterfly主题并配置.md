@@ -2,7 +2,10 @@
 title: 安装Butterfly主题并配置
 abbrlink: 4f89be81
 date: 2023-07-25 16:15:45
-tags:
+categories: 技术文
+tags: 
+- Hexo
+- 主题
 ---
 
 Hexo有非常丰富的主题可供选择：[官方主题页](https://hexo.io/themes/)。

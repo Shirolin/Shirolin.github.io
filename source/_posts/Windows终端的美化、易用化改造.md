@@ -2,7 +2,10 @@
 title: Windows终端的美化、易用化改造
 abbrlink: a8a8e99
 date: 2024-04-01 13:39:13
-tags:
+categories: 技术文
+tags: 
+- Windows
+- 美化
 ---
 用来记录Windows平台Terminal终端的美化、易用化改造过程。
 目标：以安装Oh My Posh(v3)和主题来美化，加入posh-git来增强终端补全、历史记录等功能，最终实现一个美观、易用的终端。

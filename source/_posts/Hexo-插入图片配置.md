@@ -2,7 +2,10 @@
 title: Hexo 插入图片配置
 abbrlink: 48adea7c
 date: 2024-04-01 16:55:32
-tags:
+categories: 技术文
+tags: 
+- Hexo
+- 图片
 ---
 
 Hexo使用Markdown语法编写文章时，
