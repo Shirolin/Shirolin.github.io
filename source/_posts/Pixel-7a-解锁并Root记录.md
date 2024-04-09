@@ -1,9 +1,11 @@
 ---
 title: Pixel 7a 解锁并Root记录
+categories: 技术文
 tags:
-  - 技术文
-  - Pixel
   - 教程
+  - Pixel
+  - 手机
+  - Root
 abbrlink: f9eadd70
 date: 2024-04-09 17:28:32
 ---
@@ -56,7 +58,8 @@ https://developers.google.com/android/images
 
 ### 2.3 安装Magisk，对init_boot.img进行patch
 
-打开https://github.com/topjohnwu/Magisk/releases，下载最新的Magisk Manager APK。
+打开 https://github.com/topjohnwu/Magisk/releases ，
+下载最新的Magisk Manager APK。
 
 打开Magisk Manager，选择“安装”-“选择并修补一个文件”，选择刚才解压出来的init_boot.img。
 
