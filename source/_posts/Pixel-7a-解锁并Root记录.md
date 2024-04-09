@@ -1,10 +1,11 @@
 ---
 title: Pixel 7a 解锁并Root记录
-date: 2024-04-09 17:28:32
 tags:
-- 技术文
-- Pixel
-- 教程
+  - 技术文
+  - Pixel
+  - 教程
+abbrlink: f9eadd70
+date: 2024-04-09 17:28:32
 ---
 
 入手了Pixel 7a，第一件事情就是解锁并Root，这样才能更好的发挥手机的性能。
