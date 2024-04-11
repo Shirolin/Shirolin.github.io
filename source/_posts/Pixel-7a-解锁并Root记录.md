@@ -18,6 +18,8 @@ Magisk：27.002
 入手了Pixel 7a，第一件事情就是解锁并Root，这样才能更好的发挥手机的性能。
 本文记录了解锁并Root的过程。
 
+<font color="red">请注意！刷机有风险，操作需谨慎，刷机有可能导致手机变砖，刷机前请做好备份。本文仅供参考，请自行承担风险。</font>
+
 物品清单：
 
 - 手机1台
@@ -33,6 +35,8 @@ Magisk：27.002
 在页面中找到“Download the Google USB Driver ZIP file (ZIP)”，点击即可下载。
 
 下载完成后解压，找到“android_winusb.inf”文件，右键点击安装。
+
+![安装驱动图](C5AE51B9759104A7C2FD5BA63CEB91BA.webp)
 
 ### 1.2 下载ADB工具[电脑端]
 ADB工具下载页面：[ADB工具下载](https://developer.android.com/studio/releases/platform-tools)
@@ -67,7 +71,7 @@ adb devices
 ```
 
     如果显示设备号，代表手机已经连接成功。
-    如果没有显示设备号，可能是电脑的驱动没有安装好，或者USB数据线/口，或者手机端没打开USB调试。
+    如果没有显示设备号，可能是电脑的驱动没有安装好，或者USB数据线/口，或者手机端没打开USB调试，请检查。
 
 2. 输入以下命令来重启手机进入bootloader模式：
 ```shell
@@ -111,22 +115,29 @@ adb reboot bootloader
 
 这个脚本文件会自动刷入解压出来的系统镜像，刷入完成后手机会自动重启。
 
+![刷入系统镜像图](20240411161142.webp)
+
 ※ 注意：刷入镜像后手机数据会被清空，所以刷入前要提前备份好手机数据。
 
 ※ 刷入镜像后需要重新开启USB调试，以便后续Root。
 
 ### 3.3 解压出镜像文件中的init_boot.img[电脑端]
 
-解压出镜像文件中的init_boot.img，这个文件是我们接下来需要用到的。
+在解压出来的镜像文件夹中，找到zip文件(名字类似：image-lynx-ap1a.240405.002.zip)，解压。
 
-注意：新版Pixel手机root用到的是init_boot.img，不再是旧版用到的boot.img。
+在解压出来的文件中找到init_boot.img，这个文件是我们接下来需要用到的，把它传到【手机】中的download文件夹中。
+
+※ 新版Pixel手机root用到的是init_boot.img，不再是旧版用到的boot.img。
+
+![init_boot图片](20240411161143.webp)
 
 ### 3.4 安装Magisk Manager，对init_boot.img进行patch[手机端]
 
 打开 https://github.com/topjohnwu/Magisk/releases ，
 下载最新的Magisk Manager APK。
 
-打开Magisk Manager，选择“安装”-“选择并修补一个文件”，选择刚才解压出来的init_boot.img。
+打开Magisk Manager，选择Magisk右边的“安装”-“选择并修补一个文件”，
+选择刚才传到手机download文件夹的init_boot.img。
 
 这样patch后的会生成一个新文件，保存在download文件夹中。
 新文件命名一般类似：magisk_patched-25200_sZBNk.img。
@@ -145,11 +156,14 @@ adb reboot bootloader
 fastboot flash init_boot magisk_patched-25200_sZBNk.img # 改成你的文件名
 ```
 
-刷入完成后，重启手机。
+刷入完成后，输入以下命令重启手机：
+```shell
+fastboot reboot
+```
 
 ### 3.5 验证Root[手机端]
 
-重启手机，打开Magisk Manager，即可看到已经root成功。
+重启手机后，打开Magisk Manager，即可看到已经root成功。
 
 ## 4. 结束
 
