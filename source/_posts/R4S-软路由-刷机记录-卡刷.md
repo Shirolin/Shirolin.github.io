@@ -36,7 +36,7 @@ date: 2024-04-19 09:57:27
 
 ### 下载软路由系统固件[电脑端]
 
-固件下载页面：[OpenWrt R24.03.20-D](https://github.com/DHDAXCW/OpenWrt_RockChip/releases/tag/2024.04.08-rockchip)
+固件下载页面：[OpenWrt_RockChip](https://github.com/DHDAXCW/OpenWrt_RockChip/releases/tag/2024.04.08-rockchip)
 
 找到想刷入R4S对应的固件，下载到电脑中。(注意区分Docker版和非Docker版)
 
