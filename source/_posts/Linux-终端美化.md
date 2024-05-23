@@ -10,12 +10,20 @@ tags:
 用来记录一些终端美化的方法。
 平台：CentOS 7.6|Ubuntu 20.04
 
-## 1. 安装Oh My Zsh
+## 1. 安装zsh
+ubuntu
+```
+sudo apt install zsh -y
+```
+
+*※ CentOS 安装高版本zsh请参考[《centos 安装高版本zsh》](/posts/d7590978/)*
+
+## 2. 安装Oh My Zsh
 ```
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
-## 2. 安装相关插件
+## 3. 安装相关插件
 ```
 # 语法高亮插件:zsh-syntax-highlighting
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
@@ -32,7 +40,7 @@ sed -i 's/^plugins=(git)$/plugins=(git zsh-syntax-highlighting zsh-autosuggestio
 sed -i 's/^ZSH_THEME="robbyrussell"$/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc
 ```
 
-## 3.修改默认shell
+## 4.修改默认shell
 ubuntu
 ```
 chsh -s /bin/zsh
@@ -42,7 +50,7 @@ centos
 chsh -s /usr/local/bin/zsh
 ```
 
-## 4.重新进入终端后进行主题的初始配置
+## 5.重新进入终端后进行主题的初始配置
 >                     Does this look like a diamond (rotated square)?
 >                       reference: https://graphemica.com/%E2%97%86
 > 
@@ -58,7 +66,7 @@ chsh -s /usr/local/bin/zsh
 > 
 一步一步根据自己的喜好选择即可。
 
-## 5.结束
+## 6.结束
 至此，终端美化完成。
 
 效果如下：
