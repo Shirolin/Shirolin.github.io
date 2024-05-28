@@ -8,7 +8,7 @@
       <link href="/posts/2b7a1520/"/>
       <url>/posts/2b7a1520/</url>
       
-        <content type="html"><![CDATA[<p>Pixel 7a是Google推出的一款手机，支持5G网络。<br><br>但是由于Google和国内运营商两方面的原因，<br><br>未在国内大陆地区上市的Pixel系列手机无法针对三大运营商的网络直接开启5G功能。<br>需要通过一些手段来开启。</p><p>※ 新版Pixel 8系统已经支持国内5G，不需要额外操作，Pixel 7a系统估计后续也会支持。</p><h2 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h2><p>设备：Pixel 7a<br>设备系统：Android 14</p><h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="Root手机"><a href="#Root手机" class="headerlink" title="Root手机"></a>Root手机</h3><p>见<a href="/posts/f9eadd70/">Pixel 7a 解锁并Root记录</a>。</p><h3 id="安装网络信号大师"><a href="#安装网络信号大师" class="headerlink" title="安装网络信号大师"></a>安装网络信号大师</h3><p>网络信号大师是一款可以开启5G功能的应用。</p><p>下载地址：<a href="https://play.google.com/store/apps/details?id=com.qtrun.QuickTest">网络信号大师</a></p><h3 id="运行网络信号大师并设置"><a href="#运行网络信号大师并设置" class="headerlink" title="运行网络信号大师并设置"></a>运行网络信号大师并设置</h3><p>打开网络信号大师，点击右上角的“三个点”，选择“强制功能”。</p><p><img src="/posts/2b7a1520/%E7%BD%91%E7%BB%9C%E4%BF%A1%E5%8F%B7%E5%A4%A7%E5%B8%88%E9%A6%96%E9%A1%B5.webp" alt="网络信号大师首页"></p><p>然后依次点击[1]SIM1 &gt;&gt; [3]NR MODE SETTING &gt;&gt; [4]SA+NSA。</p><p><img src="/posts/2b7a1520/%E5%BC%BA%E5%88%B6%E5%8A%9F%E8%83%BD.webp" alt="强制功能"></p><p>此时手机信号图标会先断开，然后重新连接，连接后即可开启5G功能。</p><p>最好是重启手机后再次检查，确保5G功能正常开启。</p><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Pixel 7a开启5G功能的方法就是这样，<br>如果有需要的朋友可以试试。</p>]]></content>
+        <content type="html"><![CDATA[<p>Pixel 7a是Google推出的一款手机，支持5G网络。<br><br>但是由于Google和国内运营商两方面的原因，<br><br>未在国内大陆地区上市的Pixel系列手机无法针对三大运营商的网络直接开启5G功能。<br>需要通过一些手段来开启。</p><p>※ 新版Pixel 8系统已经支持国内5G，不需要额外操作，Pixel 7a系统估计后续也会支持。</p><h2 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h2><p>设备：Pixel 7a<br>设备系统：Android 14</p><h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="Root手机"><a href="#Root手机" class="headerlink" title="Root手机"></a>Root手机</h3><p>见<a href="/posts/f9eadd70/">Pixel 7a 解锁并Root记录</a>。</p><h3 id="安装网络信号大师"><a href="#安装网络信号大师" class="headerlink" title="安装网络信号大师"></a>安装网络信号大师</h3><p>网络信号大师是一款可以开启5G功能的应用。</p><p>下载地址：<a href="https://play.google.com/store/apps/details?id=com.qtrun.QuickTest">网络信号大师</a></p><h3 id="运行网络信号大师并设置"><a href="#运行网络信号大师并设置" class="headerlink" title="运行网络信号大师并设置"></a>运行网络信号大师并设置</h3><p>打开网络信号大师，点击右上角的“三个点”，选择“强制功能”。</p><p><img src="/posts/2b7a1520/%E7%BD%91%E7%BB%9C%E4%BF%A1%E5%8F%B7%E5%A4%A7%E5%B8%88%E9%A6%96%E9%A1%B5.webp" alt="网络信号大师首页"></p><p>然后依次点击[1]SIM1 &gt;&gt; [3]NR MODE SETTING &gt;&gt; [4]SA+NSA。</p><p><img src="/posts/2b7a1520/%E5%BC%BA%E5%88%B6%E5%8A%9F%E8%83%BD.webp" alt="强制功能"></p><p>此时手机信号图标会先断开，然后重新连接，连接后即可开启5G功能。</p><p>最好是重启手机后再次检查，确保5G功能正常开启。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Pixel 7a开启5G功能的方法就是这样，<br>如果有需要的朋友可以试试。</p>]]></content>
       
       
       
@@ -105,9 +105,9 @@
             
             <tag> 教程 </tag>
             
-            <tag> 软路由 </tag>
-            
             <tag> 刷机 </tag>
+            
+            <tag> 软路由 </tag>
             
         </tags>
       
@@ -165,9 +165,9 @@
             
             <tag> 手机 </tag>
             
-            <tag> 刷机 </tag>
-            
             <tag> Root </tag>
+            
+            <tag> 刷机 </tag>
             
         </tags>
       
