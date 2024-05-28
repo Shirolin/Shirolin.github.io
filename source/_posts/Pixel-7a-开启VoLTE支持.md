@@ -102,6 +102,21 @@ VoLTE（Voice over LTE）是指通过4G网络实现的高清语音通话技术�
 但是在手机进行OTA更新后就会失效，需要重新再操作开启一遍。
 
 ## Root方法
-待补充
 
+### 安装Magisk模块：Pixel Enabler China For VoTEL
+
+Pixel Enabler China For VoTEL 是一款Magisk模块，可以开启Pixel系列手机的VoLTE功能。
+
+下载地址：[Pixel Enabler China For VoTEL](https://github.com/CHN-MuXin/MagiskModuleEnableChinaForVoTELtoPIxel)
+
+下载模块文件(一个zip包)后，打开Magisk，点击右下角“模块”，点击“从本地安装”，选择下载的模块文件，安装后重启手机。
+
+![手动安装模块](手动安装模块.webp)
+
+### 打开SIM卡设置中的VoLTE开关
+
+打开手机设置，找到“网络和互联网”-“SIM卡”-选择一张SIM卡，进入SIM卡设置界面，
+找到VoLTE开关，打开即可。
+
+![Sim卡设置](Sim卡设置.webp)
 
