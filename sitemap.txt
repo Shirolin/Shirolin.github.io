@@ -1,4 +1,5 @@
 https://shirolin.github.io/posts/e41dabd5/
+https://shirolin.github.io/posts/71bcdd7f/
 https://shirolin.github.io/posts/f138eec2/
 https://shirolin.github.io/posts/2b7a1520/
 https://shirolin.github.io/posts/92c869fb/
@@ -24,6 +25,9 @@ https://shirolin.github.io/tags/nvm/
 https://shirolin.github.io/tags/node/
 https://shirolin.github.io/tags/Hexo/
 https://shirolin.github.io/tags/%E5%9B%BE%E7%89%87/
+https://shirolin.github.io/tags/Laravel/
+https://shirolin.github.io/tags/PHP/
+https://shirolin.github.io/tags/%E7%BC%96%E7%A8%8B/
 https://shirolin.github.io/tags/%E7%BE%8E%E5%8C%96/
 https://shirolin.github.io/tags/%E6%95%99%E7%A8%8B/
 https://shirolin.github.io/tags/Pixel/
