@@ -27,7 +27,7 @@ export all_proxy=http://${宿主机IP}:${端口}
 
 # 方法
 
-在 C:\Users\<your_user>\.wslconfig 中添加以下内容(如果不存在可以手动创建)：
+在 C:\Users\\<your_user_name>\\.wslconfig 中添加以下内容(如果不存在可以手动创建)：
 
 ```ini
 [wsl2]
