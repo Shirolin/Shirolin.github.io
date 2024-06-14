@@ -12,10 +12,10 @@ date: 2024-06-14 10:33:41
 系统版本：Windows 11 22H2
 ※ 该方法在更低版本的Windows系统上未经测试，可能无法生效。
 
-# 背景
+## 背景
 WSL2默认是无法访问宿主机的代理的，如果需要使用代理访问网络，需要进行一些配置。
 
-# 问题
+## 问题
 之前通过在WSL2中设置代理的方法，如下：
 ```bash
 export http_proxy=http://${宿主机IP}:${端口}
@@ -25,7 +25,7 @@ export all_proxy=http://${宿主机IP}:${端口}
 
 然而这种方法不一定有效，这时可以尝试以下方法。
 
-# 方法
+## 方法
 
 在 C:\Users\\<your_user_name>\\.wslconfig 中添加以下内容(如果不存在可以手动创建)：
 
@@ -50,7 +50,7 @@ wsl
 
 ※ 参考：[WSL2 高级设置配置](https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config)
 
-# 结束
+## 结束
 这样，在WSL2中就可以使用宿主机的代理访问网络了。
 
 
