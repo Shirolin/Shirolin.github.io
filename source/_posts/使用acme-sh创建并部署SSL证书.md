@@ -215,6 +215,23 @@ Le_ReloadCmd=service nginx force-reload
 Le_RealFullChainPath=/etc/acme/example.com/chain.pem
 ```
 
+## 更新acme.sh
+
+升级 acme.sh 到最新版：
+```bash
+acme.sh --upgrade
+```
+
+开启自动升级：
+```bash
+acme.sh --upgrade --auto-upgrade
+```
+
+关闭自动升级：
+```bash
+acme.sh --upgrade --auto-upgrade 0
+```
+
 ## 结束
 
 至此，你已经成功使用acme.sh创建并部署SSL证书。
