@@ -123,7 +123,7 @@ acme.sh --issue -d example.com --nginx
 根据不同DNS服务商，需要做不同的配置。
 各DNS服务商的API请参考：[这里](https://github.com/Neilpang/acme.sh/tree/master/dnsapi)。
 
-※ 这里以腾讯云为例。详见[这里](https://github.com/acmesh-official/acme.sh/wiki/dnsapi#2-dnspodcn-option)
+※ 这里以腾讯云为例。文档详见[这里](https://github.com/acmesh-official/acme.sh/wiki/dnsapi#2-dnspodcn-option)。
 
 ```bash
 # 配置腾讯DNSPOD API
@@ -146,9 +146,10 @@ export DP_Key="dp_key";
 - 安装证书到Apache
 ```bash
 acme.sh --install-cert -d example.com \
-        --key-file       /path/to/keyfile/in/nginx/key.pem  \
-        --fullchain-file /path/to/fullchain/nginx/cert.pem \
-        --reloadcmd     "service nginx force-reload"
+        --cert-file      /path/to/certfile/in/apache/cert.pem  \
+        --key-file       /path/to/keyfile/in/apache/key.pem  \
+        --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \
+        --reloadcmd     "service apache2 force-reload"
 ```
 
 - 安装证书到Nginx
@@ -174,10 +175,44 @@ acme.sh --install-cert -d example.com \
 
 acme.sh会自动创建一个cron job，用于自动更新证书。
 
+- 查看cron job
+
+```bash
+crontab  -l
+
+56 * * * * "/root/.acme.sh"/acme.sh --cron --home "/root/.acme.sh" > /dev/null
+```
+
 ## 查看已安装的证书
 
 ```bash
 acme.sh --info -d example.com
+```
+
+会显示证书的信息，包括证书的过期时间等。
+
+```ini
+DOMAIN_CONF=/root/.acme.sh/example.com/example.com.conf
+Le_Domain=example.com
+Le_Alt=no
+Le_Webroot=dns_ali
+Le_PreHook=
+Le_PostHook=
+Le_RenewHook=
+Le_API=https://acme-v02.api.letsencrypt.org/directory
+Le_Keylength=
+Le_OrderFinalize=https://acme-v02.api.letsencrypt.org/acme/finalize/23xxxx150/781xxxx4310
+Le_LinkOrder=https://acme-v02.api.letsencrypt.org/acme/order/233xxx150/781xxxx4310
+Le_LinkCert=https://acme-v02.api.letsencrypt.org/acme/cert/04cbd28xxxxxx349ecaea8d07
+Le_CertCreateTime=1649358725
+Le_CertCreateTimeStr=Thu Apr  7 19:12:05 UTC 2022
+Le_NextRenewTimeStr=Mon Jun  6 19:12:05 UTC 2022
+Le_NextRenewTime=1654456325
+Le_RealCertPath=
+Le_RealCACertPath=
+Le_RealKeyPath=/etc/acme/example.com/privkey.pem
+Le_ReloadCmd=service nginx force-reload
+Le_RealFullChainPath=/etc/acme/example.com/chain.pem
 ```
 
 ## 结束
