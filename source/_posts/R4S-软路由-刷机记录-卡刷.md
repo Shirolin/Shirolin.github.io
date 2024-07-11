@@ -40,7 +40,7 @@ date: 2024-04-19 09:57:27
 
 找到想刷入R4S对应的固件，下载到电脑中。(注意区分Docker版和非Docker版)
 
-Dock版固件文件名示例：
+Docker版固件文件名示例：
 > 2024.04.08-docker-openwrt-friendlyarm_nanopi-r4s-squashfs-sysupgrade.img.gz
 
 非Docker版固件文件名示例：
