@@ -1,5 +1,6 @@
 ---
 title: 个人常用Chrome浏览器扩展
+categories: 技术文
 tags:
   - chrome
   - 浏览器
