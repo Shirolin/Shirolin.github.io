@@ -4,13 +4,29 @@
   
     
     <entry>
-      <title>削刮nfo常用源的网址</title>
+      <title>刮削nfo常用源的网址</title>
       <link href="/posts/3e2f131b/"/>
       <url>/posts/3e2f131b/</url>
       
-        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用下载工具获取电影、剧集等资源时，经常会遇到nfo文件。这些文件通常包含了资源的详细信息，比如演员、导演、简介等。</p><p>nfo文件中通常会包含一些网址，这些网址是资源的来源，我们可以通过这些网址了解资源的更多信息。</p><p>由于网络问题，使用削刮工具（如TMM、Emby、Jellyfin等）时，经常会遇到削刮资源失败的情况。这时候可以尝试对nfo文件中的网址进行优化访问。</p><h1 id="如何优化访问"><a href="#如何优化访问" class="headerlink" title="如何优化访问"></a>如何优化访问</h1><p>这里提供了一种简单的方法，可以通过修改hosts文件来优化访问。</p><p>首先，需要查找域名对应的IP地址，然后将域名和IP地址添加到hosts文件中。</p><p>查找IP地址的方法有很多，这里提供一个简单的方法：</p><ul><li>DNS Check网站：<a href="https://dnschecker.org/">https://dnschecker.org/</a></li></ul><p>各地访问的IP地址可能不同，可以尝试多个地区的IP地址，针对性地进行优化，不要盲目照搬。</p><p>其它方法也可以尝试，比如使用代理等，这里不再赘述。</p><h1 id="常用源的网址"><a href="#常用源的网址" class="headerlink" title="常用源的网址"></a>常用源的网址</h1><p>以下是一些常用的资源网址，可以尝试将这些网址及对应的IP地址添加到优化访问列表中：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assets.fanart.tv     158.69.0.103</span><br><span class="line">artworks.thetvdb.com 31.13.87.19</span><br><span class="line">api.thetvdb.com      103.97.3.19</span><br><span class="line">image.tmdb.org       143.244.49.180</span><br><span class="line">www.themoviedb.org   3.160.150.18</span><br></pre></td></tr></tbody></table></figure><h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>以上就是优化nfo文件常用源的网址的方法，希望对你有所帮助。</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用下载工具获取电影、剧集等资源时，经常会遇到nfo文件。这些文件通常包含了资源的详细信息，比如演员、导演、简介等。</p><p>nfo文件中通常会包含一些网址，这些网址是资源的来源，我们可以通过这些网址了解资源的更多信息。</p><p>由于网络问题，使用刮削工具（如TMM、Emby、Jellyfin等）时，经常会遇到刮削资源失败的情况。这时候可以尝试对nfo文件中的网址进行优化访问。</p><h1 id="如何优化访问"><a href="#如何优化访问" class="headerlink" title="如何优化访问"></a>如何优化访问</h1><p>这里提供了一种简单的方法，可以通过修改hosts文件来优化访问。</p><p>首先，需要查找域名对应的IP地址，然后将域名和IP地址添加到hosts文件中。</p><p>查找IP地址的方法有很多，这里提供一个简单的方法：</p><ul><li>DNS Check网站：<a href="https://dnschecker.org/">https://dnschecker.org/</a></li></ul><p>各地访问的IP地址可能不同，可以尝试多个地区的IP地址，针对性地进行优化，不要盲目照搬。</p><p>其它方法也可以尝试，比如使用代理等，这里不再赘述。</p><h1 id="常用源的网址"><a href="#常用源的网址" class="headerlink" title="常用源的网址"></a>常用源的网址</h1><p>以下是一些常用的资源网址，可以尝试将这些网址及对应的IP地址添加到优化访问列表中：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assets.fanart.tv     158.69.0.103</span><br><span class="line">artworks.thetvdb.com 31.13.87.19</span><br><span class="line">api.thetvdb.com      103.97.3.19</span><br><span class="line">image.tmdb.org       143.244.49.180</span><br><span class="line">www.themoviedb.org   3.160.150.18</span><br></pre></td></tr></tbody></table></figure><h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>以上就是优化nfo文件常用源的网址的方法，希望对你有所帮助。</p>]]></content>
       
       
+      <categories>
+          
+          <category> 影音娱乐 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 视频 </tag>
+            
+            <tag> 资源 </tag>
+            
+            <tag> 刮削 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -410,11 +426,11 @@
       
         <tags>
             
-            <tag> 字幕 </tag>
-            
             <tag> 视频 </tag>
             
             <tag> 资源 </tag>
+            
+            <tag> 字幕 </tag>
             
         </tags>
       
