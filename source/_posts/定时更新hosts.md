@@ -26,7 +26,7 @@ hosts文件是一个没有扩展名的文本文件，用于映射主机名和IP�
 
 # hosts来源
 
-hosts文件的来源有很多，这里提供一个GitHub上维护的hosts文件地址，可以二选一订阅使用：
+hosts文件的来源有很多，这里提供一个GitHub上维护的hosts文件地址的[项目](https://github.com/Clov614/SteamHostSync)，可以二选一订阅使用：
 
 ```powershell
 # GITHUB
