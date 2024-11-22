@@ -65,8 +65,6 @@ HOSTS_PATH="/etc/hosts"
 sed -i "/#github Start/d" $HOSTS_PATH && curl $HOSTS_URL >> $HOSTS_PATH
 
 ```
-curl -o $HOSTS_PATH $HOSTS_URL
-```
 
 - 保存为`updateHosts.sh`文件，赋予执行权限：
 
