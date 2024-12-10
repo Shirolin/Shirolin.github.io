@@ -4,6 +4,29 @@
   
     
     <entry>
+      <title>安装并设置GKD</title>
+      <link href="/posts/b2ff1374/"/>
+      <url>/posts/b2ff1374/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>GKD是一款Android设备的跳过广告工具，可以帮助用户跳过一些应用的广告。</p><p>可跳过的广告包括开屏广告、插屏广告、悬浮广告、信息流广告等。</p><p>GKD项目地址：<a href="https://github.com/gkd-kit/gkd">https://github.com/gkd-kit/gkd</a></p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="1-下载GKD并安装"><a href="#1-下载GKD并安装" class="headerlink" title="1. 下载GKD并安装"></a>1. 下载GKD并安装</h3><p>首先，从GKD的GitHub仓库下载GKD的apk安装包。</p><p>下载地址：<a href="https://github.com/gkd-kit/gkd/releases">GKD Releases</a></p><p>选择最新版本的apk文件下载，然后安装。</p><p>这里以v1.9.3版本为例。</p><h3 id="2-设置GKD"><a href="#2-设置GKD" class="headerlink" title="2. 设置GKD"></a>2. 设置GKD</h3><p>安装完成后，打开GKD，按如下步骤设置：</p><p>在GDK主页：授权GKD的无障碍服务权限，这里分为两种情况：</p><ol><li><p>如果是已root的设备，点击高级授权的“ROOT授权”按钮。</p></li><li><p>如果是未root的设备，则可以通过普通授权的“手动授权”按钮，然后在无障碍服务中找到GKD并开启。<br>※ 未root的设备也能通过高级授权的”Shizuku授权”按钮进行授权，但需要安装Shizuku Manager。</p></li></ol><p><img src="/posts/b2ff1374/gkd-pic1.png" alt="alt text"></p><h3 id="3-订阅规则"><a href="#3-订阅规则" class="headerlink" title="3. 订阅规则"></a>3. 订阅规则</h3><p>GKD只是一个工具，需要订阅规则才能跳过广告。</p><p>GKD本身不提供规则，需要用户自行添加。</p><p>GitHub上维护订阅规则仓库的检索页面：<a href="https://github.com/topics/gkd-subscription">GKD Rules</a>。</p><p>选择一个规则仓库，找到订阅链接。</p><p>这里以AIsouler_gkd这个规则仓库为例。</p><p>其订阅链接为：<code>https://registry.npmmirror.com/@aisouler/gkd_subscription/latest/files/dist/AIsouler_gkd.json5</code></p><p>在GKD的“订阅”页面，点击“+”按钮，输入订阅链接，然后点击“确定”。</p><p><img src="/posts/b2ff1374/%E8%AE%A2%E9%98%85.webp" alt="alt text"></p><h3 id="4-启用-禁用-更新规则"><a href="#4-启用-禁用-更新规则" class="headerlink" title="4. 启用/禁用/更新规则"></a>4. 启用/禁用/更新规则</h3><p>在GKD的“订阅”页面，找到刚才添加的规则，点击开关即可启用/禁用规则。</p><p>在规则列表下拉刷新，可以更新规则。</p><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>设置完成后，GKD会按照规则自动跳过广告。</p><p>如果有需要，可以在GKD的“日志”页面查看跳过的广告信息。</p><p>也可以在GKD的“设置”页面调整一些参数，比如是否显示通知、是否显示悬浮窗等。</p><p>还可以针对某个应用单独设置规则，比如禁用规则、启用规则等。</p><p>很多跳过功能是默认关闭的，可以在单个应用的设置中开启。</p><p>更多功能可以自己尝试。</p><p><img src="/posts/b2ff1374/%E5%BA%94%E7%94%A8%E8%A7%84%E5%88%99.webp" alt="alt text"></p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>至此，GKD的安装和设置完成。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Android </tag>
+            
+            <tag> 跳过广告 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>定时更新hosts</title>
       <link href="/posts/d9e2c7a1/"/>
       <url>/posts/d9e2c7a1/</url>

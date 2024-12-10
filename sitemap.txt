@@ -1,3 +1,4 @@
+https://shirolin.github.io/posts/b2ff1374/
 https://shirolin.github.io/posts/d9e2c7a1/
 https://shirolin.github.io/posts/e41dabd5/
 https://shirolin.github.io/posts/3e2f131b/
@@ -65,6 +66,7 @@ https://shirolin.github.io/tags/%E5%BD%B1%E9%9F%B3/
 https://shirolin.github.io/tags/%E9%98%85%E8%AF%BB/
 https://shirolin.github.io/tags/%E4%B8%BB%E9%A2%98/
 https://shirolin.github.io/tags/apk/
+https://shirolin.github.io/tags/%E8%B7%B3%E8%BF%87%E5%B9%BF%E5%91%8A/
 https://shirolin.github.io/tags/windows/
 https://shirolin.github.io/tags/openwrt/
 https://shirolin.github.io/tags/linux/
