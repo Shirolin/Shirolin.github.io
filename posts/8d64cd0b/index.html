@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用acme.sh创建并部署SSL证书 | 希落凛</title><meta name="author" content="Shirolin"><meta name="copyright" content="Shirolin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="背景在部署网站时，通常需要使用SSL证书来保证网站的安全性。 而获取SSL证书的方式有很多，比如通过Let’s Encrypt免费获取。 Let’s Encrypt提供了很多客户端工具，其中acme.sh是一个非常好用的工具。 acme.sh是一个纯Shell编写的ACME协议客户端，可以用来申请、更新、部署SSL证书。 安装acme.sh1curl https:&#x2F;&#x2F;get.acme.sh | s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用acme.sh创建并部署SSL证书">
+<meta property="og:url" content="https://shirolin.github.io/posts/8d64cd0b/index.html">
+<meta property="og:site_name" content="希落凛">
+<meta property="og:description" content="背景在部署网站时，通常需要使用SSL证书来保证网站的安全性。 而获取SSL证书的方式有很多，比如通过Let’s Encrypt免费获取。 Let’s Encrypt提供了很多客户端工具，其中acme.sh是一个非常好用的工具。 acme.sh是一个纯Shell编写的ACME协议客户端，可以用来申请、更新、部署SSL证书。 安装acme.sh1curl https:&#x2F;&#x2F;get.acme.sh | s">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shirolin.github.io/img/avatar_256.png">
+<meta property="article:published_time" content="2024-07-10T06:22:23.000Z">
+<meta property="article:modified_time" content="2024-12-22T09:15:04.306Z">
+<meta property="article:author" content="Shirolin">
+<meta property="article:tag" content="教程">
+<meta property="article:tag" content="运维">
+<meta property="article:tag" content="网站">
+<meta property="article:tag" content="证书">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shirolin.github.io/img/avatar_256.png"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="https://shirolin.github.io/posts/8d64cd0b/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0026a02b4775efd578ec7edc9f9fc627";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-1YK7SHGXTR"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-1YK7SHGXTR')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-1YK7SHGXTR', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":200,"languages":{"author":"作者: Shirolin","link":"链接: ","source":"来源: 希落凛","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用acme.sh创建并部署SSL证书',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar_256.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/xenoblade3.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">希落凛</span></a><a class="nav-page-title" href="/"><span class="site-name">使用acme.sh创建并部署SSL证书</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">使用acme.sh创建并部署SSL证书</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-07-10T06:22:23.000Z" title="发表于 2024-07-10 14:22:23">2024-07-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.306Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在部署网站时，通常需要使用SSL证书来保证网站的安全性。</p>
+<p>而获取SSL证书的方式有很多，比如通过Let’s Encrypt免费获取。</p>
+<p>Let’s Encrypt提供了很多客户端工具，其中acme.sh是一个非常好用的工具。</p>
+<p>acme.sh是一个纯Shell编写的ACME协议客户端，可以用来申请、更新、部署SSL证书。</p>
+<h2 id="安装acme-sh"><a href="#安装acme-sh" class="headerlink" title="安装acme.sh"></a>安装acme.sh</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://get.acme.sh | sh -s email=my@example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<p>或者</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O -  https://get.acme.sh | sh -s email=my@example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<p>或者</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth 1 https://github.com/acmesh-official/acme.sh.git</span><br><span class="line"><span class="built_in">cd</span> acme.sh</span><br><span class="line">./acme.sh --install -m my@example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<p>安装过程执行了以下操作：</p>
+<ul>
+<li>下载acme.sh脚本</li>
+<li>安装acme.sh到<code>~/.acme.sh</code>目录</li>
+<li>创建alias命令<code>acme.sh</code>，指向<code>~/.acme.sh/acme.sh</code></li>
+<li>创建cron job，用于自动更新证书</li>
+</ul>
+<h2 id="生成证书"><a href="#生成证书" class="headerlink" title="生成证书"></a>生成证书</h2><h3 id="选择CA服务器"><a href="#选择CA服务器" class="headerlink" title="选择CA服务器"></a>选择CA服务器</h3><p>证书CA服务器一般有两种: Let’s Encrypt 或 ZeroSSL。</p>
+<p>现版本的acme.sh默认使用ZeroSSL。可根据需求选择CA服务器。</p>
+<ul>
+<li>使用ZeroSSL<br>ZeroSSL申请证书之前需要先注册账号，可以通过以下命令注册：</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --register-account -m my@example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>使用Let’s Encrypt<br>如果需要使用Let’s Encrypt，可以通过以下命令把CA设置为Let’s Encrypt：</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --set-default-ca --server letsencrypt</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h3><p>可根据不同方式申请证书。</p>
+<h4 id="http-方式-无法申请泛域名证书"><a href="#http-方式-无法申请泛域名证书" class="headerlink" title="http 方式(无法申请泛域名证书)"></a>http 方式(无法申请泛域名证书)</h4><p>使用HTTP验证方式自动验证域名所有权。<br>主要有4种方式：webroot、standalone、tls、apache/nginx。</p>
+<ul>
+<li>webroot方式<br>使用webroot方式，需要指定网站根目录。<br>acme会自动在网站根目录下创建验证文件，完成验证后删除。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --issue -d example.com -webroot /path/to/webroot</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>standalone方式(需修改域名解析)<br>如果服务器没有部署网站，可以使用standalone方式。<br>这种方式需要将申请证书的域名的A记录指向这台服务器IP。<br>并且这台服务器需要安装socat。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认80端口，这里可以指定端口8080</span></span><br><span class="line">acme.sh --issue -d example.com --standalone --httpport 8080</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>tls方式(需修改域名解析)<br>这种方式也需要将申请证书的域名的A记录指向这台服务器IP。<br>并且这台服务器需要安装socat。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认443端口，这里可以指定端口8443</span></span><br><span class="line">acme.sh --issue -d example.com --alpn --tlsport 8443</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>apache/nginx方式<br>如果服务器已经部署了apache/nginx，可以使用apache/nginx方式。<br>acme会自动配置验证文件到apache/nginx的配置文件中。</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># apache方式</span></span><br><span class="line">acme.sh --issue -d example.com --apache</span><br><span class="line"></span><br><span class="line"><span class="comment"># nginx方式</span></span><br><span class="line">acme.sh --issue -d example.com --nginx</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="dns-方式-支持泛域名证书"><a href="#dns-方式-支持泛域名证书" class="headerlink" title="dns 方式(支持泛域名证书)"></a>dns 方式(支持泛域名证书)</h4><p>使用DNS验证方式自动验证域名所有权。<br>主要有很多DNS服务商的API，可以通过API自动添加TXT记录。<br>这种方式可以申请泛域名证书。为最佳选择。</p>
+<p>根据不同DNS服务商，需要做不同的配置。<br>各DNS服务商的API请参考：<a target="_blank" rel="noopener" href="https://github.com/Neilpang/acme.sh/tree/master/dnsapi">这里</a>。</p>
+<p>※ 这里以腾讯云为例。文档详见<a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi#2-dnspodcn-option">这里</a>。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置腾讯DNSPOD API</span></span><br><span class="line"><span class="built_in">export</span> DP_Id=<span class="string">"dp_id"</span>;</span><br><span class="line"><span class="built_in">export</span> DP_Key=<span class="string">"dp_key"</span>;</span><br></pre></td></tr></tbody></table></figure>
+
+<p>然后执行以下命令：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./acme.sh --issue --dns dns_dp -d example.com -d cdn.example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="证书安装"><a href="#证书安装" class="headerlink" title="证书安装"></a>证书安装</h2><p>生成的证书都在~/.acme.sh/目录底下。<br>可以手动copy文件到对应的目录，也可以使用acme.sh提供的安装命令。</p>
+<p>以下是安装到Apache和Nginx的命令。</p>
+<ul>
+<li><p>安装证书到Apache</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">        --cert-file      /path/to/certfile/in/apache/cert.pem  \</span><br><span class="line">        --key-file       /path/to/keyfile/in/apache/key.pem  \</span><br><span class="line">        --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \</span><br><span class="line">        --reloadcmd     <span class="string">"service apache2 force-reload"</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装证书到Nginx</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">        --key-file       /path/to/keyfile/in/nginx/key.pem  \</span><br><span class="line">        --fullchain-file /path/to/fullchain/nginx/cert.pem \</span><br><span class="line">        --reloadcmd     <span class="string">"service nginx force-reload"</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>–install-cert命令具有多个参数，用于指定不同的目标文件。</p>
+<p>此外，你还可以通过指定–reloadcmd参数来设置一个重启服务的命令。(该命令会被记住)<br>当证书更新完成后，系统会自动调用reloadcmd命令，以确保服务器生效。</p>
+<p>需要注意的是，–reloadcmd参数应该是一个适用于重启服务的命令。<br>你可以根据实际情况进行修改。<br>如果你正在使用Docker容器化部署，<br>可以使用类似docker exec webserver nginx -s reload的命令来重启服务。<br>这样，你就能顺利更新证书并使服务器生效了。</p>
+<h2 id="证书更新"><a href="#证书更新" class="headerlink" title="证书更新"></a>证书更新</h2><p>acme.sh会自动创建一个cron job，用于自动更新证书。</p>
+<ul>
+<li>查看cron job</li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab  -l</span><br><span class="line"></span><br><span class="line">56 * * * * <span class="string">"/root/.acme.sh"</span>/acme.sh --cron --home <span class="string">"/root/.acme.sh"</span> &gt; /dev/null</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看已安装的证书"><a href="#查看已安装的证书" class="headerlink" title="查看已安装的证书"></a>查看已安装的证书</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --info -d example.com</span><br></pre></td></tr></tbody></table></figure>
+
+<p>会显示证书的信息，包括证书的过期时间等。</p>
+<figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">DOMAIN_CONF</span>=/root/.acme.sh/example.com/example.com.conf</span><br><span class="line"><span class="attr">Le_Domain</span>=example.com</span><br><span class="line"><span class="attr">Le_Alt</span>=<span class="literal">no</span></span><br><span class="line"><span class="attr">Le_Webroot</span>=dns_ali</span><br><span class="line"><span class="attr">Le_PreHook</span>=</span><br><span class="line"><span class="attr">Le_PostHook</span>=</span><br><span class="line"><span class="attr">Le_RenewHook</span>=</span><br><span class="line"><span class="attr">Le_API</span>=https://acme-v02.api.letsencrypt.org/directory</span><br><span class="line"><span class="attr">Le_Keylength</span>=</span><br><span class="line"><span class="attr">Le_OrderFinalize</span>=https://acme-v02.api.letsencrypt.org/acme/finalize/<span class="number">23</span>xxxx150/<span class="number">781</span>xxxx4310</span><br><span class="line"><span class="attr">Le_LinkOrder</span>=https://acme-v02.api.letsencrypt.org/acme/order/<span class="number">233</span>xxx150/<span class="number">781</span>xxxx4310</span><br><span class="line"><span class="attr">Le_LinkCert</span>=https://acme-v02.api.letsencrypt.org/acme/cert/<span class="number">04</span>cbd28xxxxxx349ecaea8d07</span><br><span class="line"><span class="attr">Le_CertCreateTime</span>=<span class="number">1649358725</span></span><br><span class="line"><span class="attr">Le_CertCreateTimeStr</span>=Thu Apr  <span class="number">7</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">05</span> UTC <span class="number">2022</span></span><br><span class="line"><span class="attr">Le_NextRenewTimeStr</span>=Mon Jun  <span class="number">6</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">05</span> UTC <span class="number">2022</span></span><br><span class="line"><span class="attr">Le_NextRenewTime</span>=<span class="number">1654456325</span></span><br><span class="line"><span class="attr">Le_RealCertPath</span>=</span><br><span class="line"><span class="attr">Le_RealCACertPath</span>=</span><br><span class="line"><span class="attr">Le_RealKeyPath</span>=/etc/acme/example.com/privkey.pem</span><br><span class="line"><span class="attr">Le_ReloadCmd</span>=service nginx force-reload</span><br><span class="line"><span class="attr">Le_RealFullChainPath</span>=/etc/acme/example.com/chain.pem</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="更新acme-sh"><a href="#更新acme-sh" class="headerlink" title="更新acme.sh"></a>更新acme.sh</h2><p>升级 acme.sh 到最新版：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade</span><br></pre></td></tr></tbody></table></figure>
+
+<p>开启自动升级：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade --auto-upgrade</span><br></pre></td></tr></tbody></table></figure>
+
+<p>关闭自动升级：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade --auto-upgrade 0</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>至此，你已经成功使用acme.sh创建并部署SSL证书。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://shirolin.github.io">Shirolin</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://shirolin.github.io/posts/8d64cd0b/">https://shirolin.github.io/posts/8d64cd0b/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://shirolin.github.io" target="_blank">希落凛</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%95%99%E7%A8%8B/">教程</a><a class="post-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4/">运维</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%AB%99/">网站</a><a class="post-meta__tags" href="/tags/%E8%AF%81%E4%B9%A6/">证书</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar_256.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/f27df618/" title="个人常用Chrome浏览器扩展"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">个人常用Chrome浏览器扩展</div></div><div class="info-2"><div class="info-item-1">背景Chrome浏览器是一款非常流行的浏览器，拥有丰富的扩展功能。 以下是我个人常用的Chrome浏览器扩展。 由于MainFestV2很快将要不受支持，因此，这里挑选了满足MainFestV3规范的扩展。 扩展列表1. uBlock Origin LiteuBlock Origin Lite是一款广告拦截插件，可以有效过滤广告、弹窗、恶意网站等。uBlock Origin 原版已不满足MainFestV3规范，因此官方推荐使用uBlock Origin Lite。对比原版，Lite版功能更简洁，但基本功能都有。个人体验拦截效果差不多。 2. RSS Feed ReaderRSS Feed Reader是一款RSS订阅插件，可以订阅网站的RSS源，方便查看最新文章。免费版支持订阅的RSS源数量有限，且对源类型有限制，比如不支持推特源。 3. 沉浸式翻译沉浸式翻译是一款翻译插件，可以在网页上进行双语对照翻译。支持多种翻译引擎，如谷歌翻译、百度翻译、有道翻译等。支持划词翻译、网页翻译、双语对照等多种翻译方式。支持调用AI翻译API，翻译效果更好。 4....</div></div></div></a><a class="pagination-related" href="/posts/c465639b/" title="安装apkm文件"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">安装apkm文件</div></div><div class="info-2"><div class="info-item-1">背景在Android设备上安装应用，通常是通过Google Play商店或者APK文件进行安装。 而2021 年 8 月起，Google Play 要求所有新应用必须以 Android App Bundle (AAB) 格式进行发布。 很多新应用以及老应用的更新版本都是以 AAB 格式发布的，这种情况下，我们无法直接获取到 APK 文件。 AAB 文件无法直接安装到设备上。 解决一些第三方渠道提供了重新打包的分发方式。 比如ApkMirror，提供了重新打包的apkm文件，ApkPure、Aptoide等则提供了重新打包的xapk文件。 这些重新打包的文件可以通过一些工具进行安装。 比如apkm文件，可以通过apkmirror的官方工具进行安装。xapk文件，可以通过apkpure的官方工具或者Split APKs Installer等工具安装。 这里以apkm文件为例，介绍如何安装。 方法1. 下载apkm文件首先，从ApkMirror等渠道下载apkm文件。 2. 安装APKMirror Installer下载地址：APKMirror Installer 3....</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/ad2e0fa7/" title="Laravel开发必备：laravel-ide-helper"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-12-26</div><div class="info-item-2">Laravel开发必备：laravel-ide-helper</div></div><div class="info-2"><div class="info-item-1">背景在使用 Laravel 开发的过程中，我们经常会遇到 IDE 无法智能提示 Laravel 框架的方法和属性，这时候我们就需要使用 Laravel-ide-helper 这个工具来帮助我们解决这个问题。 安装由于 Laravel-ide-helper 是一个 Composer 包，所以我们可以很方便的通过 Composer 安装它。 12345# 直接安装composer require --dev barryvdh/laravel-ide-helper# 仅在开发系统中安装提示包 加上 --devcomposer require barryvdh/laravel-ide-helper --dev  ※ laravel-ide-helper对composer版本和Laravel 5.5版本有要求，如果安装失败，请根据提示修改composer和Laravel版本，或者安装指定版本的laravel-ide-helper。 配置如果你使用的是 Laravel 5.5 以上的版本，那么你可以跳过这一步。 在 Laravel 5.5 以下的版本中，我们需要手动添加...</div></div></div></a><a class="pagination-related" href="/posts/2b7a1520/" title="Pixel-7a-开启5G支持"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-28</div><div class="info-item-2">Pixel-7a-开启5G支持</div></div><div class="info-2"><div class="info-item-1">Pixel 7a是Google推出的一款手机，支持5G网络。但是由于Google和国内运营商两方面的原因，未在国内大陆地区上市的Pixel系列手机无法针对三大运营商的网络直接开启5G功能。需要通过一些手段来开启。 ※ 新版Pixel 8系统已经支持国内5G，不需要额外操作，Pixel 7a系统估计后续也会支持。 设备信息设备：Pixel 7a设备系统：Android 14 操作步骤Root手机见Pixel 7a 解锁并Root记录。 安装网络信号大师网络信号大师是一款可以开启5G功能的应用。 下载地址：网络信号大师 运行网络信号大师并设置打开网络信号大师，点击右上角的“三个点”，选择“强制功能”。  然后依次点击[1]SIM1 &gt;&gt; [3]NR MODE SETTING &gt;&gt; [4]SA+NSA。  此时手机信号图标会先断开，然后重新连接，连接后即可开启5G功能。 最好是重启手机后再次检查，确保5G功能正常开启。 总结Pixel 7a开启5G功能的方法就是这样，如果有需要的朋友可以试试。 </div></div></div></a><a class="pagination-related" href="/posts/92c869fb/" title="Pixel 7a 开启VoLTE支持"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-19</div><div class="info-item-2">Pixel 7a 开启VoLTE支持</div></div><div class="info-2"><div class="info-item-1">VoLTE（Voice over LTE）是指通过4G网络实现的高清语音通话技术。 由于国内2G/3G网络逐渐退网停止服务，4G网络逐渐成为主流，VoLTE技术也逐渐普及。如果不开启VoLTE，可能会导致通话质量不佳，甚至无法打电话、收发短信等问题。 而由于Google和国内运营商两方面的原因，未在国内大陆地区上市的Pixel系列手机无法针对三大运营商的网络直接开启VoLTE功能。 因此，需要通过一些手段来开启VoLTE功能。本文以Pixel 7a为例，介绍如何开启VoLTE功能，有Root和免Root两种方法，下面分别介绍。 设备信息设备：Pixel 7a设备系统：Android 14 免Root方法打开手机开发者选项打开手机设置，找到“关于本机”，连续点击“Build号(系统版本号)”7次，即可打开开发者选项。 下载Shizuku和Pixel IMS并安装Shizuku 是一款开源的Root权限管理工具，可以在不Root的情况下模拟Root权限。 Pixel IMS 是一款可以开启VoLTE功能的应用。 下载地址：  Shizuku Pixel...</div></div></div></a><a class="pagination-related" href="/posts/f9eadd70/" title="Pixel 7a 解锁并Root记录"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-09</div><div class="info-item-2">Pixel 7a 解锁并Root记录</div></div><div class="info-2"><div class="info-item-1">设备：Pixel 7a设备系统：Android 14电脑系统：Windows 11Magisk：27.002 入手了Pixel 7a，第一件事情就是解锁并Root，这样才能更好的发挥手机的性能。本文记录了解锁并Root的过程。 请注意！刷机有风险，操作需谨慎，刷机有可能导致手机变砖，刷机前请做好备份。本文仅供参考，请自行承担风险。 物品清单：  手机1台 电脑1台 USB数据线1根  1. 事前准备(已安装过的可以跳过)无论是解锁还是Root，都需要在电脑上安装驱动，以及ADB工具。 1.1 安装驱动[电脑端]驱动下载页面：Google USB Driver 在页面中找到“Download the Google USB Driver ZIP file (ZIP)”，点击即可下载。 下载完成后解压，找到“android_winusb.inf”文件，右键点击安装。  1.2 下载ADB工具[电脑端]ADB工具下载页面：ADB工具下载 下载完成后解压，将解压后的文件夹放到一个方便的位置。 之后需要在命令窗口执行的adb.exe命令和fastboot.exe命令，都在这个文件夹中。 ※...</div></div></div></a><a class="pagination-related" href="/posts/3e472caf/" title="R4S 软路由 刷机记录(卡刷)"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-19</div><div class="info-item-2">R4S 软路由 刷机记录(卡刷)</div></div><div class="info-2"><div class="info-item-1">设备：友善(NanoPi) R4S 4G内存版设备存储：TF卡 64G电脑系统：Windows 11待刷入固件：2024.04.08-openwrt-friendlyarm_nanopi-r4s-squashfs-sysupgrade.img (OpenWrt R24.03.20-D 骷髅头大佬编译版) 目标：将系统刷入TF卡，然后插入R4S，开机即可使用。 友善R4S是一款比较知名的ARM软路由(RK3399)，体积小巧性能不错，支持OpenWrt系统，本文记录了刷机的过程。 请注意！刷机有风险，操作需谨慎，刷机有可能导致设备变砖，刷机前请做好备份。本文仅供参考，请自行承担风险。 物品清单：  友善R4S...</div></div></div></a><a class="pagination-related" href="/posts/e41dabd5/" title="WSL2使用宿主机代理访问网络"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-14</div><div class="info-item-2">WSL2使用宿主机代理访问网络</div></div><div class="info-2"><div class="info-item-1">系统版本：Windows 11 22H2※ 该方法在更低版本的Windows系统上未经测试，可能无法生效。 背景WSL2默认是无法访问宿主机的代理的，如果需要使用代理访问网络，需要进行一些配置。 问题之前通过在WSL2中设置代理的方法，如下： 123export http_proxy=http://${宿主机IP}:${端口}export https_proxy=http://${宿主机IP}:${端口}export all_proxy=http://${宿主机IP}:${端口}  然而这种方法不一定有效，这时可以尝试以下方法。 方法在 C:\Users\\.wslconfig 中添加以下内容(如果不存在可以手动创建)： 123[wsl2]networkingMode = mirroredautoProxy = true  配置说明：  networkingMode = mirrored：启用镜像网络模式。 autoProxy = true：强制 WSL 使用 Windows 的 HTTP 代理信息。  然后重启WSL2即可。 重启命令： 12wsl...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar_256.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Shirolin</div><div class="author-info-description">记录一些碎碎念</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Shirolin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Shirolin" target="_blank" title="Github"><i class="fab fa-github" style="color: #0d8686;"></i></a><a class="social-icon" href="mailto:shirolin.com@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #0d8686;"></i></a><a class="social-icon" href="/linwangzhe@qq.com" target="_blank" title="Weibo"><i class="fa-brands fa-weibo" style="color: #0d8686;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">拖延症……</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85acme-sh"><span class="toc-number">2.</span> <span class="toc-text">安装acme.sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6"><span class="toc-number">3.</span> <span class="toc-text">生成证书</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9CA%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text">选择CA服务器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6"><span class="toc-number">3.2.</span> <span class="toc-text">申请证书</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#http-%E6%96%B9%E5%BC%8F-%E6%97%A0%E6%B3%95%E7%94%B3%E8%AF%B7%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="toc-number">3.2.1.</span> <span class="toc-text">http 方式(无法申请泛域名证书)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dns-%E6%96%B9%E5%BC%8F-%E6%94%AF%E6%8C%81%E6%B3%9B%E5%9F%9F%E5%90%8D%E8%AF%81%E4%B9%A6"><span class="toc-number">3.2.2.</span> <span class="toc-text">dns 方式(支持泛域名证书)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E5%AE%89%E8%A3%85"><span class="toc-number">4.</span> <span class="toc-text">证书安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E6%9B%B4%E6%96%B0"><span class="toc-number">5.</span> <span class="toc-text">证书更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E5%B7%B2%E5%AE%89%E8%A3%85%E7%9A%84%E8%AF%81%E4%B9%A6"><span class="toc-number">6.</span> <span class="toc-text">查看已安装的证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0acme-sh"><span class="toc-number">7.</span> <span class="toc-text">更新acme.sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9D%9F"><span class="toc-number">8.</span> <span class="toc-text">结束</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/ad2e0fa7/" title="Laravel开发必备：laravel-ide-helper">Laravel开发必备：laravel-ide-helper</a><time datetime="2024-12-26T09:18:42.000Z" title="发表于 2024-12-26 17:18:42">2024-12-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b2ff1374/" title="安装并设置GKD">安装并设置GKD</a><time datetime="2024-12-10T01:37:52.000Z" title="发表于 2024-12-10 09:37:52">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/d9e2c7a1/" title="定时更新hosts">定时更新hosts</a><time datetime="2024-11-22T08:29:11.000Z" title="发表于 2024-11-22 16:29:11">2024-11-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3e2f131b/" title="刮削nfo常用源的网址">刮削nfo常用源的网址</a><time datetime="2024-08-16T08:00:39.000Z" title="发表于 2024-08-16 16:00:39">2024-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/7a97a78f/" title="隐藏docker命令debug提示信息">隐藏docker命令debug提示信息</a><time datetime="2024-08-06T03:25:07.000Z" title="发表于 2024-08-06 11:25:07">2024-08-06</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Shirolin</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">よこそ, 我が <a target="_blank" rel="noopener" href="https://butterfly.js.org/">ブログ</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+  const option = null
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: '934dbcb9cd203864da23',
+      clientSecret: '1a210437c429e706c023d40994dc1d48782e9acb',
+      repo: 'Shirolin.github.io',
+      owner: 'Shirolin',
+      admin: ['Shirolin'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '15252c9df92e05d8109a319b4d72e41f'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

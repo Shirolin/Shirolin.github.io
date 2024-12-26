@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Laravel开发必备：laravel-ide-helper</title>
+      <link href="/posts/ad2e0fa7/"/>
+      <url>/posts/ad2e0fa7/</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用 Laravel 开发的过程中，我们经常会遇到 IDE 无法智能提示 Laravel 框架的方法和属性，<br>这时候我们就需要使用 Laravel-ide-helper 这个工具来帮助我们解决这个问题。</p><h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>由于 Laravel-ide-helper 是一个 Composer 包，所以我们可以很方便的通过 Composer 安装它。</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 直接安装</span></span><br><span class="line">composer require --dev barryvdh/laravel-ide-helper</span><br><span class="line"></span><br><span class="line"><span class="comment"># 仅在开发系统中安装提示包 加上 --dev</span></span><br><span class="line">composer require barryvdh/laravel-ide-helper --dev</span><br></pre></td></tr></tbody></table></figure><p>※ laravel-ide-helper对composer版本和Laravel 5.5版本有要求，如果安装失败，请根据提示修改composer和Laravel版本，或者安装指定版本的laravel-ide-helper。</p><h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>如果你使用的是 Laravel 5.5 以上的版本，那么你可以跳过这一步。</p><p>在 Laravel 5.5 以下的版本中，我们需要手动添加 ServiceProvider 到 <code>config/app.php</code> 文件中。</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'providers'</span> =&gt; [</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="title class_">Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider</span>::<span class="variable language_">class</span>,</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">];</span><br></pre></td></tr></tbody></table></figure><p>如果你想要只在非生产环境中使用 Laravel-ide-helper，那么你可以在 <code>app/Providers/AppServiceProvider.php</code> 中添加如下代码：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">register</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>{</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">environment</span>() !== <span class="string">'production'</span>) {</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;app-&gt;<span class="title function_ invoke__">register</span>(<span class="title class_">\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider</span>::<span class="variable language_">class</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p>导出配置文件</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php artisan vendor:publish --provider=<span class="string">"Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider"</span> --tag=config</span><br></pre></td></tr></tbody></table></figure><p>会在config目录下生成一个ide-helper.php文件。</p><p>修改ide-helper.php配置文件让 Laravel-ide-helper 能够为链式操作生成注释：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ide-helper.php</span></span><br><span class="line"><span class="comment"># 修改前</span></span><br><span class="line"><span class="string">'include_fluent'</span> =&gt; <span class="literal">false</span>,</span><br><span class="line"><span class="comment"># 修改后</span></span><br><span class="line"><span class="string">'include_fluent'</span> =&gt; <span class="literal">true</span>,</span><br></pre></td></tr></tbody></table></figure><h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>安装完成后，主要下面有四种方式来使用 Laravel-ide-helper：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成 ide-helper 文件</span></span><br><span class="line"><span class="comment"># 如果已存在bootstrap/compiled.php文件，需要先运行php artisan clear-compiled 来删除</span></span><br><span class="line">php artisan ide-helper:generate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成模型注释(会提示是直接写入模型还是生成到文件，建议直接写入模型)</span></span><br><span class="line">php artisan ide-helper:models</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成 PhpStorm meta 文件(如果使用其他 IDE，可以不用执行)</span></span><br><span class="line">php artisan ide-helper:meta</span><br></pre></td></tr></tbody></table></figure><h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>Laravel-ide-helper 是一个非常好用的工具，它可以帮助我们解决 IDE 无法智能提示 Laravel 框架的方法和属性的问题，<br>让我们的开发效率更高，如果你还没有使用过 Laravel-ide-helper，那么我强烈建议你尝试一下。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> laravel </tag>
+            
+            <tag> ide </tag>
+            
+            <tag> 教程 </tag>
+            
+            <tag> 开发 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>安装并设置GKD</title>
+      <link href="/posts/b2ff1374/"/>
+      <url>/posts/b2ff1374/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>GKD是一款Android设备的跳过广告工具，可以帮助用户跳过一些应用的广告。</p><p>可跳过的广告包括开屏广告、插屏广告、悬浮广告、信息流广告等。</p><p>GKD项目地址：<a href="https://github.com/gkd-kit/gkd">https://github.com/gkd-kit/gkd</a></p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="1-下载GKD并安装"><a href="#1-下载GKD并安装" class="headerlink" title="1. 下载GKD并安装"></a>1. 下载GKD并安装</h3><p>首先，从GKD的GitHub仓库下载GKD的apk安装包。</p><p>下载地址：<a href="https://github.com/gkd-kit/gkd/releases">GKD Releases</a></p><p>选择最新版本的apk文件下载，然后安装。</p><p>这里以v1.9.3版本为例。</p><h3 id="2-设置GKD"><a href="#2-设置GKD" class="headerlink" title="2. 设置GKD"></a>2. 设置GKD</h3><p>安装完成后，打开GKD，按如下步骤设置：</p><p>在GDK主页：授权GKD的无障碍服务权限，这里分为两种情况：</p><ol><li><p>如果是已root的设备，点击高级授权的“ROOT授权”按钮。</p></li><li><p>如果是未root的设备，则可以通过普通授权的“手动授权”按钮，然后在无障碍服务中找到GKD并开启。<br>※ 未root的设备也能通过高级授权的”Shizuku授权”按钮进行授权，但需要安装Shizuku Manager。</p></li></ol><p><img src="/posts/b2ff1374/gkd-pic1.png" alt="alt text"></p><h3 id="3-订阅规则"><a href="#3-订阅规则" class="headerlink" title="3. 订阅规则"></a>3. 订阅规则</h3><p>GKD只是一个工具，需要订阅规则才能跳过广告。</p><p>GKD本身不提供规则，需要用户自行添加。</p><p>GitHub上维护订阅规则仓库的检索页面：<a href="https://github.com/topics/gkd-subscription">GKD Rules</a>。</p><p>选择一个规则仓库，找到订阅链接。</p><p>这里以AIsouler_gkd这个规则仓库为例。</p><p>其订阅链接为：<code>https://registry.npmmirror.com/@aisouler/gkd_subscription/latest/files/dist/AIsouler_gkd.json5</code></p><p>在GKD的“订阅”页面，点击“+”按钮，输入订阅链接，然后点击“确定”。</p><p><img src="/posts/b2ff1374/%E8%AE%A2%E9%98%85.webp" alt="alt text"></p><h3 id="4-启用-禁用-更新规则"><a href="#4-启用-禁用-更新规则" class="headerlink" title="4. 启用/禁用/更新规则"></a>4. 启用/禁用/更新规则</h3><p>在GKD的“订阅”页面，找到刚才添加的规则，点击开关即可启用/禁用规则。</p><p>在规则列表下拉刷新，可以更新规则。</p><h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>设置完成后，GKD会按照规则自动跳过广告。</p><p>如果有需要，可以在GKD的“日志”页面查看跳过的广告信息。</p><p>也可以在GKD的“设置”页面调整一些参数，比如是否显示通知、是否显示悬浮窗等。</p><p>还可以针对某个应用单独设置规则，比如禁用规则、启用规则等。</p><p>很多跳过功能是默认关闭的，可以在单个应用的设置中开启。</p><p>更多功能可以自己尝试。</p><p><img src="/posts/b2ff1374/%E5%BA%94%E7%94%A8%E8%A7%84%E5%88%99.webp" alt="alt text"></p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>至此，GKD的安装和设置完成。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Android </tag>
+            
+            <tag> 跳过广告 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>定时更新hosts</title>
+      <link href="/posts/d9e2c7a1/"/>
+      <url>/posts/d9e2c7a1/</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用网络时，经常会遇到一些网站无法访问的情况，这时可以尝试修改hosts文件来解决。</p><p>hosts文件是一个没有扩展名的文本文件，用于映射主机名和IP地址。通过修改hosts文件，可以实现域名解析，从而更顺畅地访问对应网站。</p><p>然而，由于网络环境的变化，hosts文件需要定时更新，以保证访问的准确性。</p><h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>这里提供了一种简单的方法，可以通过定时任务来更新hosts文件。<br>有不同平台的hosts文件，这里分别介绍Windows、Linux、OpenWrt平台的hosts文件更新方法。</p><h1 id="hosts来源"><a href="#hosts来源" class="headerlink" title="hosts来源"></a>hosts来源</h1><p>hosts文件的来源有很多，这里提供一个GitHub上维护的hosts文件地址的<a href="https://github.com/Clov614/SteamHostSync">项目</a>，可以二选一订阅使用：</p><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># GITHUB</span></span><br><span class="line">https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts</span><br><span class="line"></span><br><span class="line"><span class="comment"># 国内镜像</span></span><br><span class="line">https://raw.sevencdn.com/Clov614/SteamHostSync/main/Hosts</span><br></pre></td></tr></tbody></table></figure><h2 id="Windows（通过switchhosts工具更新hosts文件）"><a href="#Windows（通过switchhosts工具更新hosts文件）" class="headerlink" title="Windows（通过switchhosts工具更新hosts文件）"></a>Windows（通过switchhosts工具更新hosts文件）</h2><p>步骤如下：</p><ul><li>下载SwitchHosts。地址：<a href="https://switchhosts.vercel.app/zh">SwitchHosts</a></li><li>安装SwitchHosts。</li><li>打开SwitchHosts工具，点击“添加hosts”按钮，选择“远程”选项，输入名称和URL(上述hosts文件地址)，设置“自动刷新”时间，最后点击“确定”。</li><li>在列表中选择刚才添加的hosts文件，点击右键选中“刷新”即可。</li><li>可以设置开机自启动SwitchHosts，保证定时更新。</li></ul><h2 id="Linux-OpenWrt（通过定时任务更新hosts文件）"><a href="#Linux-OpenWrt（通过定时任务更新hosts文件）" class="headerlink" title="Linux &amp; OpenWrt（通过定时任务更新hosts文件）"></a>Linux &amp; OpenWrt（通过定时任务更新hosts文件）</h2><p>步骤如下：</p><ul><li>创建一个shell脚本文件，内容如下：</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># hosts文件地址</span></span><br><span class="line">HOSTS_URL=<span class="string">"https://raw.githubusercontent.com/Clov614/SteamHostSync/main/Hosts"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># hosts文件保存路径</span></span><br><span class="line">HOSTS_PATH=<span class="string">"/etc/hosts"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找并删除已有的自定义hosts文件内容，并追加新的hosts文件内容</span></span><br><span class="line">sed -i <span class="string">"/#github Start/d"</span> <span class="variable">$HOSTS_PATH</span> &amp;&amp; curl <span class="variable">$HOSTS_URL</span> &gt;&gt; <span class="variable">$HOSTS_PATH</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure><ul><li>保存为<code>updateHosts.sh</code>文件，赋予执行权限：</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x updateHosts.sh</span><br></pre></td></tr></tbody></table></figure><ul><li>编辑定时任务，执行<code>crontab -e</code>，添加如下内容：</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 每天凌晨3点更新hosts文件</span></span><br><span class="line">0 3 * * * /path/to/updateHosts.sh</span><br></pre></td></tr></tbody></table></figure><ul><li>保存退出即可。</li></ul><p>※ 需要注意权限问题，确保脚本和hosts文件有读写权限。</p><h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>以上就是定时更新hosts文件的方法，希服对你有所帮助。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> 网络 </tag>
+            
+            <tag> windows </tag>
+            
+            <tag> openwrt </tag>
+            
+            <tag> linux </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>刮削nfo常用源的网址</title>
+      <link href="/posts/3e2f131b/"/>
+      <url>/posts/3e2f131b/</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在使用下载工具获取电影、剧集等资源时，经常会遇到nfo文件。这些文件通常包含了资源的详细信息，比如演员、导演、简介等。</p><p>nfo文件中通常会包含一些网址，这些网址是资源的来源，我们可以通过这些网址了解资源的更多信息。</p><p>由于网络问题，使用刮削工具（如TMM、Emby、Jellyfin等）时，经常会遇到刮削资源失败的情况。这时候可以尝试对nfo文件中的网址进行优化访问。</p><h1 id="如何优化访问"><a href="#如何优化访问" class="headerlink" title="如何优化访问"></a>如何优化访问</h1><p>这里提供了一种简单的方法，可以通过修改hosts文件来优化访问。</p><p>首先，需要查找域名对应的IP地址，然后将域名和IP地址添加到hosts文件中。</p><p>查找IP地址的方法有很多，这里提供一个简单的方法：</p><ul><li>DNS Check网站：<a href="https://dnschecker.org/">https://dnschecker.org/</a></li></ul><p>各地访问的IP地址可能不同，可以尝试多个地区的IP地址，针对性地进行优化，不要盲目照搬。</p><p>其它方法也可以尝试，比如使用代理等，这里不再赘述。</p><h1 id="常用源的网址"><a href="#常用源的网址" class="headerlink" title="常用源的网址"></a>常用源的网址</h1><p>以下是一些常用的资源网址，可以尝试将这些网址及对应的IP地址添加到优化访问列表中：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">assets.fanart.tv     158.69.0.103</span><br><span class="line">artworks.thetvdb.com 31.13.87.19</span><br><span class="line">api.thetvdb.com      103.97.3.19</span><br><span class="line">image.tmdb.org       143.244.49.180</span><br><span class="line">www.themoviedb.org   3.160.150.18</span><br></pre></td></tr></tbody></table></figure><h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>以上就是优化nfo文件常用源的网址的方法，希望对你有所帮助。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 影音娱乐 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 视频 </tag>
+            
+            <tag> 资源 </tag>
+            
+            <tag> 刮削 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>隐藏docker命令debug提示信息</title>
+      <link href="/posts/7a97a78f/"/>
+      <url>/posts/7a97a78f/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在使用docker命令时，有时候会遇到一些debug提示信息，比如：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">What<span class="string">'s next?</span></span><br><span class="line"><span class="string">  Try Docker Debug for seamless, persistent debugging tools in any container or image → docker debug 05d214e2c470</span></span><br><span class="line"><span class="string">  Learn more at https://docs.docker.com/go/debug-cli</span></span><br></pre></td></tr></tbody></table></figure><p>这些提示信息可能会干扰我们的操作，如果不需要这些提示信息，可以通过设置环境变量来隐藏。</p><h2 id="隐藏提示信息"><a href="#隐藏提示信息" class="headerlink" title="隐藏提示信息"></a>隐藏提示信息</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> DOCKER_CLI_HINTS=<span class="literal">false</span></span><br></pre></td></tr></tbody></table></figure><p>可在脚本中添加该命令，或者将其添加到<code>~/.bashrc</code>或<code>~/.bash_profile</code>中，使其永久生效。</p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>以上就是隐藏docker命令debug提示信息的方法，希望对你有所帮助。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> docker </tag>
+            
+            <tag> 疑难杂症 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>个人常用Chrome浏览器扩展</title>
+      <link href="/posts/f27df618/"/>
+      <url>/posts/f27df618/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>Chrome浏览器是一款非常流行的浏览器，拥有丰富的扩展功能。</p><p>以下是我个人常用的Chrome浏览器扩展。</p><p>由于MainFestV2很快将要不受支持，因此，<br>这里挑选了满足MainFestV3规范的扩展。</p><h2 id="扩展列表"><a href="#扩展列表" class="headerlink" title="扩展列表"></a>扩展列表</h2><h3 id="1-uBlock-Origin-Lite"><a href="#1-uBlock-Origin-Lite" class="headerlink" title="1. uBlock Origin Lite"></a>1. <a href="https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh">uBlock Origin Lite</a></h3><p>uBlock Origin Lite是一款广告拦截插件，可以有效过滤广告、弹窗、恶意网站等。<br>uBlock Origin 原版已不满足MainFestV3规范，因此官方推荐使用uBlock Origin Lite。<br>对比原版，Lite版功能更简洁，但基本功能都有。<br>个人体验拦截效果差不多。</p><h3 id="2-RSS-Feed-Reader"><a href="#2-RSS-Feed-Reader" class="headerlink" title="2. RSS Feed Reader"></a>2. <a href="https://chrome.google.com/webstore/detail/pnjaodmkngahhkoihejjehlcdlnohgmp">RSS Feed Reader</a></h3><p>RSS Feed Reader是一款RSS订阅插件，可以订阅网站的RSS源，方便查看最新文章。<br>免费版支持订阅的RSS源数量有限，且对源类型有限制，比如不支持推特源。</p><h3 id="3-沉浸式翻译"><a href="#3-沉浸式翻译" class="headerlink" title="3. 沉浸式翻译"></a>3. <a href="https://chromewebstore.google.com/detail/%E6%B2%89%E6%B5%B8%E5%BC%8F%E7%BF%BB%E8%AF%91-%E7%BD%91%E9%A1%B5%E7%BF%BB%E8%AF%91%E6%8F%92%E4%BB%B6-pdf%E7%BF%BB%E8%AF%91-%E5%85%8D%E8%B4%B9/bpoadfkcbjbfhfodiogcnhhhpibjhbnh">沉浸式翻译</a></h3><p>沉浸式翻译是一款翻译插件，可以在网页上进行双语对照翻译。<br>支持多种翻译引擎，如谷歌翻译、百度翻译、有道翻译等。<br>支持划词翻译、网页翻译、双语对照等多种翻译方式。<br>支持调用AI翻译API，翻译效果更好。</p><h3 id="4-图片另存为JPG-PNG-WebP"><a href="#4-图片另存为JPG-PNG-WebP" class="headerlink" title="4. 图片另存为JPG/PNG/WebP"></a>4. <a href="https://chromewebstore.google.com/detail/%E5%9B%BE%E7%89%87%E5%8F%A6%E5%AD%98%E4%B8%BAjpgpngwebp/gabfmnliflodkdafenbcpjdlppllnemd">图片另存为JPG/PNG/WebP</a></h3><p>为图片添加右键菜单：另存为PNG，另存为JPG，另存为WebP.<br>提供将页面上的图片右键另存为JPG/PNG/WebP的功能。</p><h3 id="5-超级拖拽"><a href="#5-超级拖拽" class="headerlink" title="5. 超级拖拽"></a>5. <a href="https://chromewebstore.google.com/detail/%E8%B6%85%E7%BA%A7%E6%8B%96%E6%8B%BD/jaikcnhlohebodlpkmjepipngegjbfpg">超级拖拽</a></h3><p>超级拖拽是一款拖拽插件，可以拖拽链接打开新窗口/后台窗口，也可以拖拽关键词进行搜索。<br>还附带了8个常用鼠标手势。</p><h3 id="6-批量图片下载器-Imageye"><a href="#6-批量图片下载器-Imageye" class="headerlink" title="6. 批量图片下载器 - Imageye"></a>6. <a href="https://chromewebstore.google.com/detail/%E6%89%B9%E9%87%8F%E5%9B%BE%E7%89%87%E4%B8%8B%E8%BD%BD%E5%99%A8-imageye/agionbommeaifngbhincahgmoflcikhm">批量图片下载器 - Imageye</a></h3><p>Imageye是一款图片下载插件，可以批量下载网页上的图片。<br>支持自定义下载规则，可以过滤图片大小、类型、域名等。</p><h3 id="7-Youtube-和其他视频服务的屏幕截图"><a href="#7-Youtube-和其他视频服务的屏幕截图" class="headerlink" title="7. Youtube 和其他视频服务的屏幕截图"></a>7. <a href="https://chromewebstore.google.com/detail/youtube-%E5%92%8C%E5%85%B6%E4%BB%96%E8%A7%86%E9%A2%91%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE/eohbopdjmoklfmecdmiohonlglhemigh">Youtube 和其他视频服务的屏幕截图</a></h3><p>Youtube 和其他视频服务的屏幕截图是一款视频截图插件，可以截取Youtube和其他视频网站的视频截图。</p><h3 id="8-Awesome-Screenshot-截图录屏"><a href="#8-Awesome-Screenshot-截图录屏" class="headerlink" title="8. Awesome Screenshot 截图录屏"></a>8. <a href="https://chromewebstore.google.com/detail/awesome-screenshot-%E6%88%AA%E5%9B%BE%E5%BD%95%E5%B1%8F/nlipoenfbbikpbjkfpfillcgkoblgpmj">Awesome Screenshot 截图录屏</a></h3><p>Awesome Screenshot 截图录屏是一款截图录屏插件，可以截取网页截图、录制屏幕、编辑图片等。</p><h3 id="9-篡改猴"><a href="#9-篡改猴" class="headerlink" title="9. 篡改猴"></a>9. <a href="https://chromewebstore.google.com/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/dhdgffkkebhmkfjojejmpbldmpobfkfo">篡改猴</a></h3><p>篡改猴是一款用户脚本管理插件，可以自定义网页样式、功能等。<br>原名油猴脚本，后改名篡改猴。</p><h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>以上是我个人常用的Chrome浏览器扩展，希望对你有所帮助。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> chrome </tag>
+            
+            <tag> 浏览器 </tag>
+            
+            <tag> 扩展 </tag>
+            
+            <tag> 插件 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>使用acme.sh创建并部署SSL证书</title>
+      <link href="/posts/8d64cd0b/"/>
+      <url>/posts/8d64cd0b/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在部署网站时，通常需要使用SSL证书来保证网站的安全性。</p><p>而获取SSL证书的方式有很多，比如通过Let’s Encrypt免费获取。</p><p>Let’s Encrypt提供了很多客户端工具，其中acme.sh是一个非常好用的工具。</p><p>acme.sh是一个纯Shell编写的ACME协议客户端，可以用来申请、更新、部署SSL证书。</p><h2 id="安装acme-sh"><a href="#安装acme-sh" class="headerlink" title="安装acme.sh"></a>安装acme.sh</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://get.acme.sh | sh -s email=my@example.com</span><br></pre></td></tr></tbody></table></figure><p>或者</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O -  https://get.acme.sh | sh -s email=my@example.com</span><br></pre></td></tr></tbody></table></figure><p>或者</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth 1 https://github.com/acmesh-official/acme.sh.git</span><br><span class="line"><span class="built_in">cd</span> acme.sh</span><br><span class="line">./acme.sh --install -m my@example.com</span><br></pre></td></tr></tbody></table></figure><p>安装过程执行了以下操作：</p><ul><li>下载acme.sh脚本</li><li>安装acme.sh到<code>~/.acme.sh</code>目录</li><li>创建alias命令<code>acme.sh</code>，指向<code>~/.acme.sh/acme.sh</code></li><li>创建cron job，用于自动更新证书</li></ul><h2 id="生成证书"><a href="#生成证书" class="headerlink" title="生成证书"></a>生成证书</h2><h3 id="选择CA服务器"><a href="#选择CA服务器" class="headerlink" title="选择CA服务器"></a>选择CA服务器</h3><p>证书CA服务器一般有两种: Let’s Encrypt 或 ZeroSSL。</p><p>现版本的acme.sh默认使用ZeroSSL。可根据需求选择CA服务器。</p><ul><li>使用ZeroSSL<br>ZeroSSL申请证书之前需要先注册账号，可以通过以下命令注册：</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --register-account -m my@example.com</span><br></pre></td></tr></tbody></table></figure><ul><li>使用Let’s Encrypt<br>如果需要使用Let’s Encrypt，可以通过以下命令把CA设置为Let’s Encrypt：</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --set-default-ca --server letsencrypt</span><br></pre></td></tr></tbody></table></figure><h3 id="申请证书"><a href="#申请证书" class="headerlink" title="申请证书"></a>申请证书</h3><p>可根据不同方式申请证书。</p><h4 id="http-方式-无法申请泛域名证书"><a href="#http-方式-无法申请泛域名证书" class="headerlink" title="http 方式(无法申请泛域名证书)"></a>http 方式(无法申请泛域名证书)</h4><p>使用HTTP验证方式自动验证域名所有权。<br>主要有4种方式：webroot、standalone、tls、apache/nginx。</p><ul><li>webroot方式<br>使用webroot方式，需要指定网站根目录。<br>acme会自动在网站根目录下创建验证文件，完成验证后删除。</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --issue -d example.com -webroot /path/to/webroot</span><br></pre></td></tr></tbody></table></figure><ul><li>standalone方式(需修改域名解析)<br>如果服务器没有部署网站，可以使用standalone方式。<br>这种方式需要将申请证书的域名的A记录指向这台服务器IP。<br>并且这台服务器需要安装socat。</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认80端口，这里可以指定端口8080</span></span><br><span class="line">acme.sh --issue -d example.com --standalone --httpport 8080</span><br></pre></td></tr></tbody></table></figure><ul><li>tls方式(需修改域名解析)<br>这种方式也需要将申请证书的域名的A记录指向这台服务器IP。<br>并且这台服务器需要安装socat。</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 默认443端口，这里可以指定端口8443</span></span><br><span class="line">acme.sh --issue -d example.com --alpn --tlsport 8443</span><br></pre></td></tr></tbody></table></figure><ul><li>apache/nginx方式<br>如果服务器已经部署了apache/nginx，可以使用apache/nginx方式。<br>acme会自动配置验证文件到apache/nginx的配置文件中。</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># apache方式</span></span><br><span class="line">acme.sh --issue -d example.com --apache</span><br><span class="line"></span><br><span class="line"><span class="comment"># nginx方式</span></span><br><span class="line">acme.sh --issue -d example.com --nginx</span><br></pre></td></tr></tbody></table></figure><h4 id="dns-方式-支持泛域名证书"><a href="#dns-方式-支持泛域名证书" class="headerlink" title="dns 方式(支持泛域名证书)"></a>dns 方式(支持泛域名证书)</h4><p>使用DNS验证方式自动验证域名所有权。<br>主要有很多DNS服务商的API，可以通过API自动添加TXT记录。<br>这种方式可以申请泛域名证书。为最佳选择。</p><p>根据不同DNS服务商，需要做不同的配置。<br>各DNS服务商的API请参考：<a href="https://github.com/Neilpang/acme.sh/tree/master/dnsapi">这里</a>。</p><p>※ 这里以腾讯云为例。文档详见<a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi#2-dnspodcn-option">这里</a>。</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置腾讯DNSPOD API</span></span><br><span class="line"><span class="built_in">export</span> DP_Id=<span class="string">"dp_id"</span>;</span><br><span class="line"><span class="built_in">export</span> DP_Key=<span class="string">"dp_key"</span>;</span><br></pre></td></tr></tbody></table></figure><p>然后执行以下命令：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./acme.sh --issue --dns dns_dp -d example.com -d cdn.example.com</span><br></pre></td></tr></tbody></table></figure><h2 id="证书安装"><a href="#证书安装" class="headerlink" title="证书安装"></a>证书安装</h2><p>生成的证书都在~/.acme.sh/目录底下。<br>可以手动copy文件到对应的目录，也可以使用acme.sh提供的安装命令。</p><p>以下是安装到Apache和Nginx的命令。</p><ul><li><p>安装证书到Apache</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">        --cert-file      /path/to/certfile/in/apache/cert.pem  \</span><br><span class="line">        --key-file       /path/to/keyfile/in/apache/key.pem  \</span><br><span class="line">        --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \</span><br><span class="line">        --reloadcmd     <span class="string">"service apache2 force-reload"</span></span><br></pre></td></tr></tbody></table></figure></li><li><p>安装证书到Nginx</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --install-cert -d example.com \</span><br><span class="line">        --key-file       /path/to/keyfile/in/nginx/key.pem  \</span><br><span class="line">        --fullchain-file /path/to/fullchain/nginx/cert.pem \</span><br><span class="line">        --reloadcmd     <span class="string">"service nginx force-reload"</span></span><br></pre></td></tr></tbody></table></figure></li></ul><p>–install-cert命令具有多个参数，用于指定不同的目标文件。</p><p>此外，你还可以通过指定–reloadcmd参数来设置一个重启服务的命令。(该命令会被记住)<br>当证书更新完成后，系统会自动调用reloadcmd命令，以确保服务器生效。</p><p>需要注意的是，–reloadcmd参数应该是一个适用于重启服务的命令。<br>你可以根据实际情况进行修改。<br>如果你正在使用Docker容器化部署，<br>可以使用类似docker exec webserver nginx -s reload的命令来重启服务。<br>这样，你就能顺利更新证书并使服务器生效了。</p><h2 id="证书更新"><a href="#证书更新" class="headerlink" title="证书更新"></a>证书更新</h2><p>acme.sh会自动创建一个cron job，用于自动更新证书。</p><ul><li>查看cron job</li></ul><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab  -l</span><br><span class="line"></span><br><span class="line">56 * * * * <span class="string">"/root/.acme.sh"</span>/acme.sh --cron --home <span class="string">"/root/.acme.sh"</span> &gt; /dev/null</span><br></pre></td></tr></tbody></table></figure><h2 id="查看已安装的证书"><a href="#查看已安装的证书" class="headerlink" title="查看已安装的证书"></a>查看已安装的证书</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --info -d example.com</span><br></pre></td></tr></tbody></table></figure><p>会显示证书的信息，包括证书的过期时间等。</p><figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">DOMAIN_CONF</span>=/root/.acme.sh/example.com/example.com.conf</span><br><span class="line"><span class="attr">Le_Domain</span>=example.com</span><br><span class="line"><span class="attr">Le_Alt</span>=<span class="literal">no</span></span><br><span class="line"><span class="attr">Le_Webroot</span>=dns_ali</span><br><span class="line"><span class="attr">Le_PreHook</span>=</span><br><span class="line"><span class="attr">Le_PostHook</span>=</span><br><span class="line"><span class="attr">Le_RenewHook</span>=</span><br><span class="line"><span class="attr">Le_API</span>=https://acme-v02.api.letsencrypt.org/directory</span><br><span class="line"><span class="attr">Le_Keylength</span>=</span><br><span class="line"><span class="attr">Le_OrderFinalize</span>=https://acme-v02.api.letsencrypt.org/acme/finalize/<span class="number">23</span>xxxx150/<span class="number">781</span>xxxx4310</span><br><span class="line"><span class="attr">Le_LinkOrder</span>=https://acme-v02.api.letsencrypt.org/acme/order/<span class="number">233</span>xxx150/<span class="number">781</span>xxxx4310</span><br><span class="line"><span class="attr">Le_LinkCert</span>=https://acme-v02.api.letsencrypt.org/acme/cert/<span class="number">04</span>cbd28xxxxxx349ecaea8d07</span><br><span class="line"><span class="attr">Le_CertCreateTime</span>=<span class="number">1649358725</span></span><br><span class="line"><span class="attr">Le_CertCreateTimeStr</span>=Thu Apr  <span class="number">7</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">05</span> UTC <span class="number">2022</span></span><br><span class="line"><span class="attr">Le_NextRenewTimeStr</span>=Mon Jun  <span class="number">6</span> <span class="number">19</span>:<span class="number">12</span>:<span class="number">05</span> UTC <span class="number">2022</span></span><br><span class="line"><span class="attr">Le_NextRenewTime</span>=<span class="number">1654456325</span></span><br><span class="line"><span class="attr">Le_RealCertPath</span>=</span><br><span class="line"><span class="attr">Le_RealCACertPath</span>=</span><br><span class="line"><span class="attr">Le_RealKeyPath</span>=/etc/acme/example.com/privkey.pem</span><br><span class="line"><span class="attr">Le_ReloadCmd</span>=service nginx force-reload</span><br><span class="line"><span class="attr">Le_RealFullChainPath</span>=/etc/acme/example.com/chain.pem</span><br></pre></td></tr></tbody></table></figure><h2 id="更新acme-sh"><a href="#更新acme-sh" class="headerlink" title="更新acme.sh"></a>更新acme.sh</h2><p>升级 acme.sh 到最新版：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade</span><br></pre></td></tr></tbody></table></figure><p>开启自动升级：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade --auto-upgrade</span><br></pre></td></tr></tbody></table></figure><p>关闭自动升级：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">acme.sh --upgrade --auto-upgrade 0</span><br></pre></td></tr></tbody></table></figure><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>至此，你已经成功使用acme.sh创建并部署SSL证书。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> 运维 </tag>
+            
+            <tag> 网站 </tag>
+            
+            <tag> 证书 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>安装apkm文件</title>
+      <link href="/posts/c465639b/"/>
+      <url>/posts/c465639b/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在Android设备上安装应用，通常是通过Google Play商店或者APK文件进行安装。</p><p>而2021 年 8 月起，Google Play 要求所有新应用必须以 Android App Bundle (AAB) 格式进行发布。</p><p>很多新应用以及老应用的更新版本都是以 AAB 格式发布的，这种情况下，我们无法直接获取到 APK 文件。</p><p>AAB 文件无法直接安装到设备上。</p><h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>一些第三方渠道提供了重新打包的分发方式。</p><p>比如ApkMirror，提供了重新打包的apkm文件，ApkPure、Aptoide等则提供了重新打包的xapk文件。</p><p>这些重新打包的文件可以通过一些工具进行安装。</p><p>比如apkm文件，可以通过apkmirror的官方工具进行安装。<br>xapk文件，可以通过apkpure的官方工具或者Split APKs Installer等工具安装。</p><p>这里以apkm文件为例，介绍如何安装。</p><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="1-下载apkm文件"><a href="#1-下载apkm文件" class="headerlink" title="1. 下载apkm文件"></a>1. 下载apkm文件</h3><p>首先，从ApkMirror等渠道下载apkm文件。</p><h3 id="2-安装APKMirror-Installer"><a href="#2-安装APKMirror-Installer" class="headerlink" title="2. 安装APKMirror Installer"></a>2. 安装APKMirror Installer</h3><p>下载地址：<a href="https://www.apkmirror.com/apk/apkmirror/apkmirror-installer-official/apkmirror-installer-official-1-7-1-26-821f366-release/">APKMirror Installer</a></p><h3 id="3-打开APKMirror-Installer安装apkm文件"><a href="#3-打开APKMirror-Installer安装apkm文件" class="headerlink" title="3. 打开APKMirror Installer安装apkm文件"></a>3. 打开APKMirror Installer安装apkm文件</h3><p>安装过程如下图：</p><p><img src="/posts/c465639b/apkm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B.webp" alt="alt text"></p><ul><li>1.打开APKMirror Installer，点击Browse Files</li><li>2.授权文件访问权限</li><li>3.选择刚才下载的apkm文件，点击Install Package</li><li>4.APKMirror Installer会根据系统默认勾选需要安装的文件，这里直接点击Install app即可</li><li>5.授权安装权限，等待安装完成</li></ul><p>※ 第4步可根据自己的机型调整需要安装的文件，如果安装后出现不兼容等问题，可以尝试勾选其他文件。</p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>安装完成后，即可在设备上找到安装的应用。<br>如果嫌占用空间，可以删除下载的apkm文件以及APKMirror Installer。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Android </tag>
+            
+            <tag> apk </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Laravel data_get()方法遇到下标名带.符号的处理</title>
+      <link href="/posts/71bcdd7f/"/>
+      <url>/posts/71bcdd7f/</url>
+      
+        <content type="html"><![CDATA[<h2 id="data-get-辅助函数介绍"><a href="#data-get-辅助函数介绍" class="headerlink" title="data_get()辅助函数介绍"></a>data_get()辅助函数介绍</h2><p>Laravel提供了一个非常方便的辅助函数<code>data_get()</code>，用于获取数组或对象的值。</p><p>它能够处理数组和对象的多维数据，支持使用<code>.</code>符号来访问多维数据的下标。</p><p>例如，我们有一个数组：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$data</span> = [<span class="string">'products'</span> =&gt; [<span class="string">'desk'</span> =&gt; [<span class="string">'price'</span> =&gt; <span class="number">100</span>], <span class="string">'chair'</span> =&gt; [<span class="string">'price'</span> =&gt; <span class="number">50</span>]];</span><br></pre></td></tr></tbody></table></figure><p>我们可以使用<code>data_get()</code>函数来获取<code>$data['products']['desk']['price']</code>的值：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$price</span> = <span class="title function_ invoke__">data_get</span>(<span class="variable">$data</span>, <span class="string">'products.desk.price'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果为 100</span></span><br></pre></td></tr></tbody></table></figure><p>当然，<code>data_get()</code>函数还支持默认值，如果指定的下标不存在，可以返回默认值：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$price</span> = <span class="title function_ invoke__">data_get</span>(<span class="variable">$data</span>, <span class="string">'products.window.price'</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果为 0</span></span><br></pre></td></tr></tbody></table></figure><p>还可以使用<code>*</code>通配符来获取数组中的所有值：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$prices</span> = <span class="title function_ invoke__">data_get</span>(<span class="variable">$data</span>, <span class="string">'products.*.price'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果为 [100, 50]</span></span><br></pre></td></tr></tbody></table></figure><p>以上为<code>data_get()</code>函数的基本用法。</p><h2 id="下标名带-符号的问题"><a href="#下标名带-符号的问题" class="headerlink" title="下标名带.符号的问题"></a>下标名带<code>.</code>符号的问题</h2><p>但是，当下标名带<code>.</code>符号时，<code>data_get()</code>函数会出现问题。</p><p>例如，我们有一个数组：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$data</span> = [<span class="string">'products'</span> =&gt; [<span class="string">'desk'</span> =&gt; [<span class="string">'price'</span> =&gt; <span class="number">100</span>], <span class="string">'chair'</span> =&gt; [<span class="string">'price'</span> =&gt; <span class="number">50</span>], <span class="string">'window.glass'</span> =&gt; [<span class="string">'price'</span> =&gt; <span class="number">200</span>]];</span><br></pre></td></tr></tbody></table></figure><p>我们想要获取<code>$data['products']['window.glass']['price']</code>的值：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$price</span> = <span class="title function_ invoke__">data_get</span>(<span class="variable">$data</span>, <span class="string">'products.window.glass.price'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果为 null</span></span><br></pre></td></tr></tbody></table></figure><p>这是因为<code>data_get()</code>函数会将<code>.</code>符号解释为多维数据的分隔符，而不是普通的字符。</p><h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p>为了解决这个问题，我们可以使用数组形式的下标来访问多维数据。</p><p>例如，我们可以使用<code>data_get()</code>函数来获取<code>$data['products']['window.glass']['price']</code>的值：</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$price</span> = <span class="title function_ invoke__">data_get</span>(<span class="variable">$data</span>, [<span class="string">'products'</span>, <span class="string">'window.glass'</span>, <span class="string">'price'</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结果为 200</span></span><br></pre></td></tr></tbody></table></figure><p>这样，我们就可以正确地获取包含<code>.</code>符号的下标的值了。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><code>data_get()</code>函数是一个非常方便的辅助函数，用于获取数组或对象的值。</p><p>但是，当下标名带<code>.</code>符号时，<code>data_get()</code>函数会出现问题。且官方介绍文档中并没有提到这个问题。</p><p>为了解决这个问题，我们可以使用数组形式的下标来访问多维数据。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Laravel </tag>
+            
+            <tag> PHP </tag>
+            
+            <tag> 编程 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>WSL2使用宿主机代理访问网络</title>
+      <link href="/posts/e41dabd5/"/>
+      <url>/posts/e41dabd5/</url>
+      
+        <content type="html"><![CDATA[<p>系统版本：Windows 11 22H2<br>※ 该方法在更低版本的Windows系统上未经测试，可能无法生效。</p><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>WSL2默认是无法访问宿主机的代理的，如果需要使用代理访问网络，需要进行一些配置。</p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>之前通过在WSL2中设置代理的方法，如下：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> http_proxy=http://<span class="variable">${宿主机IP}</span>:<span class="variable">${端口}</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=http://<span class="variable">${宿主机IP}</span>:<span class="variable">${端口}</span></span><br><span class="line"><span class="built_in">export</span> all_proxy=http://<span class="variable">${宿主机IP}</span>:<span class="variable">${端口}</span></span><br></pre></td></tr></tbody></table></figure><p>然而这种方法不一定有效，这时可以尝试以下方法。</p><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>在 C:\Users\<your_user_name>\.wslconfig 中添加以下内容(如果不存在可以手动创建)：</your_user_name></p><figure class="highlight ini"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[wsl2]</span></span><br><span class="line"><span class="attr">networkingMode</span> = mirrored</span><br><span class="line"><span class="attr">autoProxy</span> = <span class="literal">true</span></span><br></pre></td></tr></tbody></table></figure><p>配置说明：</p><ul><li><code>networkingMode = mirrored</code>：启用镜像网络模式。</li><li><code>autoProxy = true</code>：强制 WSL 使用 Windows 的 HTTP 代理信息。</li></ul><p>然后重启WSL2即可。</p><p>重启命令：</p><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wsl <span class="literal">--shutdown</span></span><br><span class="line">wsl</span><br></pre></td></tr></tbody></table></figure><p>※ 参考：<a href="https://learn.microsoft.com/zh-cn/windows/wsl/wsl-config">WSL2 高级设置配置</a></p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>这样，在WSL2中就可以使用宿主机的代理访问网络了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> WSL </tag>
+            
+            <tag> 代理 </tag>
+            
+            <tag> 网络 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>下载Navicat的历史版本</title>
+      <link href="/posts/f138eec2/"/>
+      <url>/posts/f138eec2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Navicat官网的下载页面一般只能下载到最新版本，<br>想下载历史版本又不想通过第三方提供的资源怎么办呢？</p><h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p>其实如果想要下载历史版本的话，可以直接手动修改Url中的版本号即可。</p><p>例如我想下载 v15.0版本，<br>则下载链接为：<br><a href="https://download.navicat.com/download/navicat150_premium_cs_x64.exe">https://download.navicat.com/download/navicat150_premium_cs_x64.exe</a><br>以此类推。</p><p>具体发行版本可参照<a href="https://www.navicat.com.cn/products/navicat-premium-release-note">此处</a>：</p><h1 id="常用版本下载链接"><a href="#常用版本下载链接" class="headerlink" title="常用版本下载链接"></a>常用版本下载链接</h1><ul><li><p>Navicat Premium 15.0</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Windows</span><br><span class="line">https://download.navicat.com/download/navicat150_premium_cs_x64.exe</span><br><span class="line"></span><br><span class="line"># macOS</span><br><span class="line">https://download.navicat.com/download/navicat150_premium_cs.dmg</span><br></pre></td></tr></tbody></table></figure></li><li><p>Navicat Premium 16.1</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Windows</span><br><span class="line">https://download.navicat.com/download/navicat161_premium_cs_x64.exe</span><br><span class="line"></span><br><span class="line"># macOS</span><br><span class="line">https://download.navicat.com/download/navicat161_premium_cs.dmg</span><br></pre></td></tr></tbody></table></figure></li><li><p>Navicat Premium 17.0</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Windows</span><br><span class="line">https://download.navicat.com/download/navicat170_premium_cs_x64.exe</span><br><span class="line"></span><br><span class="line"># macOS</span><br><span class="line">https://download.navicat.com/download/navicat170_premium_cs.dmg</span><br></pre></td></tr></tbody></table></figure></li></ul><h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>以上。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Navicat </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Pixel-7a-开启5G支持</title>
+      <link href="/posts/2b7a1520/"/>
+      <url>/posts/2b7a1520/</url>
+      
+        <content type="html"><![CDATA[<p>Pixel 7a是Google推出的一款手机，支持5G网络。<br><br>但是由于Google和国内运营商两方面的原因，<br><br>未在国内大陆地区上市的Pixel系列手机无法针对三大运营商的网络直接开启5G功能。<br>需要通过一些手段来开启。</p><p>※ 新版Pixel 8系统已经支持国内5G，不需要额外操作，Pixel 7a系统估计后续也会支持。</p><h2 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h2><p>设备：Pixel 7a<br>设备系统：Android 14</p><h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><h3 id="Root手机"><a href="#Root手机" class="headerlink" title="Root手机"></a>Root手机</h3><p>见<a href="/posts/f9eadd70/">Pixel 7a 解锁并Root记录</a>。</p><h3 id="安装网络信号大师"><a href="#安装网络信号大师" class="headerlink" title="安装网络信号大师"></a>安装网络信号大师</h3><p>网络信号大师是一款可以开启5G功能的应用。</p><p>下载地址：<a href="https://play.google.com/store/apps/details?id=com.qtrun.QuickTest">网络信号大师</a></p><h3 id="运行网络信号大师并设置"><a href="#运行网络信号大师并设置" class="headerlink" title="运行网络信号大师并设置"></a>运行网络信号大师并设置</h3><p>打开网络信号大师，点击右上角的“三个点”，选择“强制功能”。</p><p><img src="/posts/2b7a1520/%E7%BD%91%E7%BB%9C%E4%BF%A1%E5%8F%B7%E5%A4%A7%E5%B8%88%E9%A6%96%E9%A1%B5.webp" alt="网络信号大师首页"></p><p>然后依次点击[1]SIM1 &gt;&gt; [3]NR MODE SETTING &gt;&gt; [4]SA+NSA。</p><p><img src="/posts/2b7a1520/%E5%BC%BA%E5%88%B6%E5%8A%9F%E8%83%BD.webp" alt="强制功能"></p><p>此时手机信号图标会先断开，然后重新连接，连接后即可开启5G功能。</p><p>最好是重启手机后再次检查，确保5G功能正常开启。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>Pixel 7a开启5G功能的方法就是这样，<br>如果有需要的朋友可以试试。</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Pixel </tag>
+            
+            <tag> 手机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>在Android上看漫画的最佳方案:Mihon</title>
+      <link href="/posts/e4cf944b/"/>
+      <url>/posts/e4cf944b/</url>
+      
+        <content type="html"><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>很多人喜欢在电子移动设备上看漫画。<br>但是很多漫画App或者网站的体验并不是很好，<br>常见问题有：</p><ul><li>广告太多</li><li>漫画资源不全</li><li>没有预加载功能，翻页加载慢</li><li>交互不友好</li><li>无法同步阅读进度</li><li>无法收藏漫画</li><li>无法下载漫画</li></ul><p>有些人会搭建NAS，<br>把漫画资源放到NAS上，<br>然后其它设备通过网络访问NAS上的漫画资源来看漫画，<br>或者通过发送漫画到Kindle等电子阅读器上来看漫画。<br>对于收藏党来说，这种方式是一个不错的选择，<br>毕竟可以自己掌握资源，不受限制。</p><p>但是对于一些不想搭建NAS的人来说，<br>他们可能更希望有一个漫画阅读器，<br>能够搜索到互联网上的各个网站的漫画资源，<br>并且可以在线阅读和下载漫画。</p><p>这种需求下，<br>可以聚合多个漫画网站的漫画资源的漫画阅读器就孕育而生了。</p><p>这里就要介绍一个这种漫画阅读器：Android平台上的<a href="https://mihon.app/">Mihon</a>。<br>(甚至可以说是最好用的漫画阅读器之一)</p><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Mihon是一个开源的漫画聚合阅读器，<br>有如下特点：</p><ul><li>开源免费无广告</li><li>支持多种漫画源</li><li>支持在线阅读和下载漫画</li><li>支持预加载漫画，看一页后台会预先加载后面的几页</li><li>支持跨漫画源搜索漫画</li><li>支持阅读进度迁移(从一个源迁移到另一个源)</li><li>支持第三方阅读进度(Tracker)追踪，如Bangumi、AniList、Kitsu、MyAnimeList等</li><li>支持订阅漫画更新提醒，自动下载</li><li>支持收藏漫画</li><li>支持自定义阅读交互，如点击区域、翻页方式、阅读方向(适配条漫)、页面裁切、双页阅读、滤镜等</li><li>支持创建自定义分类来管理漫画</li><li>支持备份和迁移数据</li></ul><p>Mihon的前身是<a href="https://tachiyomi.org/">Tachiyomi</a>，<br>Tachiyomi在很长一段时间内都是Android上最好用的漫画阅读器，<br>但是由于种种原因，<br>Tachiyomi的开发者停止了对Tachiyomi的维护。</p><p>在Tachiyomi停止维护后，Mihon成为了最佳的替代方案。</p><p>Mihon是Tachiyomi的一个分支，基础功能和界面基本与Tachiyomi一致。<br>与Tachiyomi一样，Mihon本身不提供漫画资源，需要用户自行添加漫画源。<br>但与Tachiyomi不同的是，Mihon本身不附带任何源，<br>以此来避免Tachiyomi那样的问题，<br>用户需要自己手动去找源才能正常使用。</p><p>【免责声明】</p><blockquote><p>本文仅供学习交流使用，不得用于任何商业用途，如有侵权，请联系删除。<br>文中涉及的软件均为开源软件，如有侵权，请联系删除。</p></blockquote><h5 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h5><blockquote><p>Mihon的名字即日语「見本」读音的罗马音，意为「样本」，<br>即是说该app用来观看漫画试读、预览的意思，请不要用于商业用途，或者用于其他违法侵权行为。</p><p>Tachiyomi的名字即日语「立ち読み」读音的罗马音，意为「站立阅读」，日本书店中常常有读者站着试读漫画的场景，<br>即是说该app用来试读漫画。</p></blockquote><h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><p>系统：Android 8 及以上<br>网络：需要能顺畅连接海外网络的网络环境</p><h2 id="安装Mihon"><a href="#安装Mihon" class="headerlink" title="安装Mihon"></a>安装Mihon</h2><p>下载地址：<a href="https://mihon.app/download/">Mihon官网下载</a></p><p>选择稳定版或者测试版(Beta)，下载apk文件并安装。</p><p><img src="/posts/e4cf944b/%E4%B8%8B%E8%BD%BD%E9%A1%B5%E9%9D%A2.webp" alt="下载Mihon"></p><h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="初始化设置"><a href="#初始化设置" class="headerlink" title="初始化设置"></a>初始化设置</h3><p>第一次打开Mihon，会引导进行一些初始设置。<br>请根据提示进行操作。</p><p>首先会提示你选择主题，选择一个主题即可。</p><p><img src="/posts/e4cf944b/%E9%80%89%E6%8B%A9%E4%B8%BB%E9%A2%98.webp" alt="选择主题"></p><p>然后会让你配置下载路径，可以选择一个文件夹作为下载路径。<br>(比如新建一个文件夹，命名为MihonDownload)</p><p><img src="/posts/e4cf944b/%E9%85%8D%E7%BD%AE%E4%B8%8B%E8%BD%BD%E8%B7%AF%E5%BE%84.webp" alt="配置下载路径"></p><h3 id="添加源"><a href="#添加源" class="headerlink" title="添加源"></a>添加源</h3><p>Mihon与Tachiyomi一样，本身不提供漫画资源，需要用户通过安装插件来添加漫画源。</p><p>但是Mihon这里与Tachiyomi又有所不同，</p><p>Tachiyomi默认提供了插件列表，用户可以直接在Tachiyomi中添加插件。(这也是Tachiyomi被封的原因之一)</p><p>而Mihon没有提供插件列表，用户需要自己添加插件仓库，然后再添加插件(源)。</p><h4 id="添加插件仓库"><a href="#添加插件仓库" class="headerlink" title="添加插件仓库"></a>添加插件仓库</h4><ol><li><p>有2个途径进入插件仓库的设置界面：</p><ul><li><p>方法1：点击主界面右下角的【浏览】按钮，然后点击上方的【插件】，可以看到目前没有插件仓库，点击【插件仓库】<br><img src="/posts/e4cf944b/%E6%B7%BB%E5%8A%A0%E6%8F%92%E4%BB%B6%E4%BB%93%E5%BA%931.webp" alt="添加插件仓库1"></p></li><li><p>方法2：Mihon版本较旧的话可能没有方法1的入口，则可以点击主界面右下角的【更多】按钮，然后点击【设置】-【浏览】-【插件仓库】<br><img src="/posts/e4cf944b/%E6%B7%BB%E5%8A%A0%E6%8F%92%E4%BB%B6%E4%BB%93%E5%BA%932.webp" alt="添加插件仓库2"></p></li></ul></li><li><p>在插件仓库界面点击右下角的【+】按钮，<br>输入插件仓库地址：</p><blockquote><p><a href="https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json">https://raw.githubusercontent.com/keiyoushi/extensions/repo/index.min.json</a></p></blockquote><p>然后点击【添加】</p><blockquote><p>插件仓库是另外单独的一个项目，由第三方维护，所以可能会有插件仓库地址变更的情况。<br>如果上面的地址失效了，可以在<a href="https://keiyoushi.github.io/docs/guides/getting-started#adding-the-extension-repo">这里</a>找到最新的插件仓库地址。</p></blockquote></li><li><p>添加完后，返回【浏览】-【插件列表】，刷新插件列表，就可以看到更多插件了。</p></li></ol><h4 id="添加插件"><a href="#添加插件" class="headerlink" title="添加插件"></a>添加插件</h4><ol><li><p>在【插件列表】中找到你想要的插件，点击【安装】。(右上角可筛选语言)<br><img src="/posts/e4cf944b/%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B61.webp" alt="安装插件1"></p><p>安装需要给予Mihon安装的权限，点击【允许】。</p></li><li><p>安装完后，在【插件列表】中可以看到已安装的插件。<br><img src="/posts/e4cf944b/%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B62.webp" alt="安装插件2"></p><p>注意：这里已安装的插件默认是“未信任”的状态，需要手动点击信任。</p></li></ol><h3 id="阅读漫画"><a href="#阅读漫画" class="headerlink" title="阅读漫画"></a>阅读漫画</h3><ol><li><p>在【浏览】-【图源】中选择一个插件点击，就可以进入该图源的漫画列表了。<br><img src="/posts/e4cf944b/%E8%BF%9B%E5%85%A5%E6%BC%AB%E7%94%BB%E6%BA%901.webp" alt="进入漫画源1"></p></li><li><p>阅读过程中，可以下载漫画，也可以添加到书架，或者修改阅读交互等等。<br><img src="/posts/e4cf944b/%E9%98%85%E8%AF%BB%E6%BC%AB%E7%94%BB.webp" alt="阅读漫画"></p></li></ol><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是Mihon的使用方法。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> 漫画 </tag>
+            
+            <tag> 影音 </tag>
+            
+            <tag> 阅读 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Pixel 7a 开启VoLTE支持</title>
+      <link href="/posts/92c869fb/"/>
+      <url>/posts/92c869fb/</url>
+      
+        <content type="html"><![CDATA[<p>VoLTE（Voice over LTE）是指通过4G网络实现的高清语音通话技术。</p><p>由于国内2G/3G网络逐渐退网停止服务，4G网络逐渐成为主流，VoLTE技术也逐渐普及。<br>如果不开启VoLTE，可能会导致通话质量不佳，甚至无法打电话、收发短信等问题。</p><p>而由于Google和国内运营商两方面的原因，<br>未在国内大陆地区上市的Pixel系列手机无法针对三大运营商的网络直接开启VoLTE功能。</p><p>因此，需要通过一些手段来开启VoLTE功能。<br>本文以Pixel 7a为例，介绍如何开启VoLTE功能，<br>有Root和免Root两种方法，下面分别介绍。</p><h2 id="设备信息"><a href="#设备信息" class="headerlink" title="设备信息"></a>设备信息</h2><p>设备：Pixel 7a<br>设备系统：Android 14</p><h2 id="免Root方法"><a href="#免Root方法" class="headerlink" title="免Root方法"></a>免Root方法</h2><h3 id="打开手机开发者选项"><a href="#打开手机开发者选项" class="headerlink" title="打开手机开发者选项"></a>打开手机开发者选项</h3><p>打开手机设置，找到“关于本机”，连续点击“Build号(系统版本号)”7次，即可打开开发者选项。</p><h3 id="下载Shizuku和Pixel-IMS并安装"><a href="#下载Shizuku和Pixel-IMS并安装" class="headerlink" title="下载Shizuku和Pixel IMS并安装"></a>下载Shizuku和Pixel IMS并安装</h3><p><a href="https://shizuku.rikka.app/">Shizuku</a> 是一款开源的Root权限管理工具，可以在不Root的情况下模拟Root权限。</p><p><a href="https://play.google.com/store/apps/details?id=dev.bluehouse.enablevolte">Pixel IMS</a> 是一款可以开启VoLTE功能的应用。</p><p>下载地址：</p><ul><li><a href="https://github.com/RikkaApps/Shizuku/releases">Shizuku</a></li><li><a href="https://github.com/kyujin-cho/pixel-volte-patch/releases">Pixel IMS</a></li></ul><h3 id="运行Shizuku并设置"><a href="#运行Shizuku并设置" class="headerlink" title="运行Shizuku并设置"></a>运行Shizuku并设置</h3><p>打开Shizuku，找到“通过无线调试启动”，点击“配对”。<br>※ 这里不清楚步骤的话，可以点击“分步骤指南”来查看。</p><p><img src="/posts/92c869fb/Shizuku%E9%85%8D%E5%AF%B9.webp" alt="Shizuku配对"></p><p>按照提示操作会跳转到开发者选项，找到“无线调试”，点击“启用”。<br>弹出的对话框中点击“允许”。</p><p><img src="/posts/92c869fb/wifi%E8%B0%83%E8%AF%95.webp" alt="wifi调试"></p><p>启用后点击左边“无线调试”几个字，会进入“无线调试”页面，找到“使用配对码配对设备”，点击。会出现一个配对码，先不要关闭该界面。</p><p>这时候顶部会弹出Shizuku的一个下拉通知，点击“输入配对码”，输入刚才的配对码，点击“确定”。即可完成配对。</p><p><img src="/posts/92c869fb/%E6%97%A0%E7%BA%BF%E9%85%8D%E5%AF%B9.webp" alt="无线配对"></p><p>※ 如果配对失败，可以尝试重新配对，如果一直失败，可以分屏运行Shizuku和无线调试窗口，这样可以方便输入配对码，提高成功率。</p><p>配对成功后，<br>返回Shizuku界面，点击“启动”按钮。<br>看到“Service started”即表示Shizuku启动成功。</p><h3 id="在Pixel-IMS中开启VoLTE"><a href="#在Pixel-IMS中开启VoLTE" class="headerlink" title="在Pixel IMS中开启VoLTE"></a>在Pixel IMS中开启VoLTE</h3><p>打开Pixel IMS，会收到来自Shizuku提示，询问是否允许Pixel IMS使用Shizuku的权限，点击“始终允许”。<br>等到右下角出现SIM卡配置按钮，即表示Shizuku权限已经生效。</p><p>点击SIM卡配置按钮，<br>打开如下开关：</p><ul><li>启用VoLTE</li><li>启用VoWiFi</li><li>启用增强4G(LTE+)</li><li>允许添加接入点APN</li><li>显示VoWiFi选项</li><li>隐藏增强4G(LTE+)图标</li><li>在SIM信息中显示IMS状态</li></ul><p><img src="/posts/92c869fb/Sim%E9%85%8D%E7%BD%AE.webp" alt="Sim配置"></p><p>回到Pixel IMS主界面，<br>看到“支持VoLTE”的状态变为“是”，即表示系统已出现VoLTE开关。</p><p><img src="/posts/92c869fb/Pixel-IMS.webp" alt="Pixel-IMS"></p><h3 id="打开SIM卡设置中的VoLTE开关"><a href="#打开SIM卡设置中的VoLTE开关" class="headerlink" title="打开SIM卡设置中的VoLTE开关"></a>打开SIM卡设置中的VoLTE开关</h3><p>打开手机设置，找到“网络和互联网”-“SIM卡”-选择一张SIM卡，进入SIM卡设置界面，<br>找到VoLTE开关，打开即可。</p><p><img src="/posts/92c869fb/Sim%E5%8D%A1%E8%AE%BE%E7%BD%AE.webp" alt="Sim卡设置"></p><h3 id="免Root方法总结"><a href="#免Root方法总结" class="headerlink" title="免Root方法总结"></a>免Root方法总结</h3><p>至此，VoLTE功能已经开启，可以在设置中查看VoLTE的状态。<br>通过这种方法开启VoLTE功能，不需要Root，也不需要刷机，操作简单，适合大多数用户。<br>但是在手机进行OTA更新后就会失效，需要重新再操作开启一遍。</p><h2 id="Root方法"><a href="#Root方法" class="headerlink" title="Root方法"></a>Root方法</h2><h3 id="安装Magisk模块：Pixel-Enabler-China-For-VoTEL"><a href="#安装Magisk模块：Pixel-Enabler-China-For-VoTEL" class="headerlink" title="安装Magisk模块：Pixel Enabler China For VoTEL"></a>安装Magisk模块：Pixel Enabler China For VoTEL</h3><p>Pixel Enabler China For VoTEL 是一款Magisk模块，可以开启Pixel系列手机的VoLTE功能。</p><p>下载地址：<a href="https://github.com/CHN-MuXin/MagiskModuleEnableChinaForVoTELtoPIxel">Pixel Enabler China For VoTEL</a></p><p>下载模块文件(一个zip包)后，打开Magisk，点击右下角“模块”，点击“从本地安装”，选择下载的模块文件，安装后重启手机。</p><p><img src="/posts/92c869fb/%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85%E6%A8%A1%E5%9D%97.webp" alt="手动安装模块"></p><h3 id="打开SIM卡设置中的VoLTE开关-1"><a href="#打开SIM卡设置中的VoLTE开关-1" class="headerlink" title="打开SIM卡设置中的VoLTE开关"></a>打开SIM卡设置中的VoLTE开关</h3><p>打开手机设置，找到“网络和互联网”-“SIM卡”-选择一张SIM卡，进入SIM卡设置界面，<br>找到VoLTE开关，打开即可。</p><p><img src="/posts/92c869fb/Sim%E5%8D%A1%E8%AE%BE%E7%BD%AE.webp" alt="Sim卡设置"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Pixel </tag>
+            
+            <tag> 手机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>R4S 软路由 刷机记录(卡刷)</title>
+      <link href="/posts/3e472caf/"/>
+      <url>/posts/3e472caf/</url>
+      
+        <content type="html"><![CDATA[<p>设备：友善(NanoPi) R4S 4G内存版<br>设备存储：TF卡 64G<br>电脑系统：Windows 11<br>待刷入固件：2024.04.08-openwrt-friendlyarm_nanopi-r4s-squashfs-sysupgrade.img (OpenWrt R24.03.20-D 骷髅头大佬编译版)</p><p>目标：<br>将系统刷入TF卡，然后插入R4S，开机即可使用。</p><p>友善R4S是一款比较知名的ARM软路由(RK3399)，体积小巧性能不错，支持OpenWrt系统，本文记录了刷机的过程。</p><p><font color="red">请注意！刷机有风险，操作需谨慎，刷机有可能导致设备变砖，刷机前请做好备份。本文仅供参考，请自行承担风险。</font></p><p>物品清单：</p><ul><li>友善R4S 1台</li><li>电脑1台</li><li>TF卡1张</li><li>TF卡读卡器1个</li></ul><h2 id="事前准备"><a href="#事前准备" class="headerlink" title="事前准备"></a>事前准备</h2><h3 id="写盘工具下载-电脑端"><a href="#写盘工具下载-电脑端" class="headerlink" title="写盘工具下载[电脑端]"></a>写盘工具下载[电脑端]</h3><p>写盘工具下载页面：<a href="https://rufus.ie/zh/">Rufus</a></p><h3 id="下载软路由系统固件-电脑端"><a href="#下载软路由系统固件-电脑端" class="headerlink" title="下载软路由系统固件[电脑端]"></a>下载软路由系统固件[电脑端]</h3><p>固件下载页面：<a href="https://github.com/DHDAXCW/OpenWrt_RockChip/releases/tag/2024.04.08-rockchip">OpenWrt_RockChip</a></p><p>找到想刷入R4S对应的固件，下载到电脑中。(注意区分Docker版和非Docker版)</p><p>Docker版固件文件名示例：</p><blockquote><p>2024.04.08-docker-openwrt-friendlyarm_nanopi-r4s-squashfs-sysupgrade.img.gz</p></blockquote><p>非Docker版固件文件名示例：</p><blockquote><p>2024.04.08-openwrt-friendlyarm_nanopi-r4s-squashfs-sysupgrade.img.gz</p></blockquote><p>下载完成后无需解压，保留.gz格式即可。</p><p>※ 其它第三方固件请自行查找，例如iStoreOS等。</p><h2 id="刷机"><a href="#刷机" class="headerlink" title="刷机"></a>刷机</h2><h3 id="插入TF卡-电脑端"><a href="#插入TF卡-电脑端" class="headerlink" title="插入TF卡[电脑端]"></a>插入TF卡[电脑端]</h3><p>将TF卡插入读卡器，插入电脑。</p><p>如果弹出格式化提示，请选择取消(注意：不要格式化！)。</p><h3 id="使用Rufus写入固件-电脑端"><a href="#使用Rufus写入固件-电脑端" class="headerlink" title="使用Rufus写入固件[电脑端]"></a>使用Rufus写入固件[电脑端]</h3><p>打开Rufus。</p><p>如果已经插入TF卡，Rufus会自动识别，不用进行任何修改。</p><p>点击“选择”，选择刚才下载好的固件文件。</p><p>点击“开始”，等待写入完成。(注意：写入过程中不要拔出TF卡，有弹出警告时点击“确定”)</p><p>等到写入完成，状态栏下的进度条会提示“准备就绪”，点击“关闭”。</p><p>弹出TF卡即可。</p><h3 id="刷入系统-软路由端"><a href="#刷入系统-软路由端" class="headerlink" title="刷入系统[软路由端]"></a>刷入系统[软路由端]</h3><p>R4S断电，将TF卡插入R4S的TF卡槽。</p><p>接通电源，开机。</p><p>等待启动完成。（第一次启动可能需要等待较长时间）</p><p>启动完成后，可以通过网线连接R4S的LAN口，访问。</p><p>如果能访问到OpenWrt的管理界面，说明刷机成功。</p><p>不同固件版本的OpenWrt管理界面地址可能不同，可以查看固件的说明文档。<br>例如本文用的固件管理界面地址为：192.168.11.1<br>默认账号密码为：root/password</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上就是R4S软路由的刷机过程，刷机过程中如果遇到问题，可以查看固件的说明文档，或者在相关论坛、群组提问。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> 刷机 </tag>
+            
+            <tag> 软路由 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>个人常用Android应用收录</title>
+      <link href="/posts/1d1408a9/"/>
+      <url>/posts/1d1408a9/</url>
+      
+        <content type="html"><![CDATA[<p>日常使用的Android应用收录，<br>比较不大众，带有个人倾向性，仅供参考。</p><h2 id="1-工具类"><a href="#1-工具类" class="headerlink" title="1. 工具类"></a>1. 工具类</h2><h3 id="1-1-DevCheck"><a href="#1-1-DevCheck" class="headerlink" title="1.1 DevCheck"></a>1.1 DevCheck</h3><p>介绍：DevCheck 是一款功能强大的安卓设备硬件和系统信息检测查看软件，可实时查看设备上发生的活动，并查看其所有技术参数。<br>含内购，但免费版已经足够好用。</p><p>应用页面：<a href="https://play.google.com/store/apps/details?id=flar2.devcheck&amp;hl=zh&amp;gl=US">https://play.google.com/store/apps/details?id=flar2.devcheck&amp;hl=zh&amp;gl=US</a></p><h3 id="1-2-黑阈"><a href="#1-2-黑阈" class="headerlink" title="1.2 黑阈"></a>1.2 黑阈</h3><p>介绍：黑阈是一款无需 root 权限就能让应用待机或强制停止运行的工具。<br>它主要用于防止应用在后台长时间运行,从而提高手机的流畅性和电池续航。</p><p>应用页面：<a href="https://play.google.com/store/apps/details?id=me.piebridge.brevent&amp;hl=zh&amp;gl=US">https://play.google.com/store/apps/details?id=me.piebridge.brevent&amp;hl=zh&amp;gl=US</a></p><p>官网：<a href="https://brevent.jianyv.com/">https://brevent.jianyv.com/</a></p><h3 id="1-3-GKD-跳过广告"><a href="#1-3-GKD-跳过广告" class="headerlink" title="1.3 GKD(跳过广告)"></a>1.3 GKD(跳过广告)</h3><p>介绍：主要用来跳过应用的开屏广告及应用内广告，<br>基于 无障碍 + 高级选择器 + 订阅规则 的自定义屏幕点击 APP。</p><p>官方说明文档：<a href="https://gkd.li/guide/">https://gkd.li/guide/</a></p><p>项目地址：<a href="https://github.com/gkd-kit/gkd">https://github.com/gkd-kit/gkd</a></p><h2 id="2-生活娱乐类"><a href="#2-生活娱乐类" class="headerlink" title="2. 生活娱乐类"></a>2. 生活娱乐类</h2><h3 id="2-1-See微博-微博第三方客户端"><a href="#2-1-See微博-微博第三方客户端" class="headerlink" title="2.1 See微博(微博第三方客户端)"></a>2.1 See微博(微博第三方客户端)</h3><p>介绍：See微博是一款第三方微博客户端，无广告，无垃圾信息，时间轴正常排序，<br>现在已经不再维护更新，但旧版(Ver.3.0.0.1)依旧可以使用。</p><p>项目地址(已不再维护)：<a href="https://github.com/funcenter/See">https://github.com/funcenter/See</a></p><p>旧版下载地址：暂无</p><h3 id="2-2-VLC-本地视频播放器"><a href="#2-2-VLC-本地视频播放器" class="headerlink" title="2.2 VLC(本地视频播放器)"></a>2.2 VLC(本地视频播放器)</h3><p>介绍：VLC是一款跨平台的多媒体播放器，支持播放几乎所有格式的音频和视频文件。</p><p>应用页面：<a href="https://play.google.com/store/apps/details?id=org.videolan.vlc">https://play.google.com/store/apps/details?id=org.videolan.vlc</a></p><p>官网：<a href="https://www.videolan.org/vlc/index.zh_CN.html">https://www.videolan.org/vlc/index.zh_CN.html</a></p><h3 id="2-3-极简汇率-汇率换算"><a href="#2-3-极简汇率-汇率换算" class="headerlink" title="2.3 极简汇率(汇率换算)"></a>2.3 极简汇率(汇率换算)</h3><p>介绍：极简汇率是一款简洁的汇率换算工具，支持多种货币的换算。</p><p>应用页面：<a href="https://play.google.com/store/apps/details?id=com.tratao.xcurrency">https://play.google.com/store/apps/details?id=com.tratao.xcurrency</a></p><h3 id="2-4-Download-Twitter-Videos-推特视频下载"><a href="#2-4-Download-Twitter-Videos-推特视频下载" class="headerlink" title="2.4 Download Twitter Videos(推特视频下载)"></a>2.4 Download Twitter Videos(推特视频下载)</h3><p>介绍：Download Twitter Videos 是一款推特视频下载工具，支持下载推特视频和GIF。<br>免费广告少，无需登录，操作简单，更新及时。</p><p>应用页面：<a href="https://play.google.com/store/apps/details?id=tweeter.gif.twittervideodownloader">https://play.google.com/store/apps/details?id=tweeter.gif.twittervideodownloader</a></p><h3 id="2-5-Kodi-多媒体中心"><a href="#2-5-Kodi-多媒体中心" class="headerlink" title="2.5 Kodi(多媒体中心)"></a>2.5 Kodi(多媒体中心)</h3><p>介绍：Kodi 是一款开源的多媒体中心软件，支持多种格式的音频、视频、图片等文件。<br>可用来管理、播放本地媒体文件，也可安装插件来观看网络视频。我一般用来管理、观看NAS上的视频。<br>支持多平台，包括Android、Windows、Linux等。<br>支持外挂字幕、HDR播放、杜比全景声、DTS/X等音频格式，也有第三方改版支持杜比世界。</p><p>应用页面：<a href="https://play.google.com/store/apps/details?id=org.xbmc.kodi">https://play.google.com/store/apps/details?id=org.xbmc.kodi</a></p><p>官网：<a href="https://kodi.tv/">https://kodi.tv/</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Android </tag>
+            
+            <tag> 应用 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Pixel 7a 解锁并Root记录</title>
+      <link href="/posts/f9eadd70/"/>
+      <url>/posts/f9eadd70/</url>
+      
+        <content type="html"><![CDATA[<p>设备：Pixel 7a<br>设备系统：Android 14<br>电脑系统：Windows 11<br>Magisk：27.002</p><p>入手了Pixel 7a，第一件事情就是解锁并Root，这样才能更好的发挥手机的性能。<br>本文记录了解锁并Root的过程。</p><p><font color="red">请注意！刷机有风险，操作需谨慎，刷机有可能导致手机变砖，刷机前请做好备份。本文仅供参考，请自行承担风险。</font></p><p>物品清单：</p><ul><li>手机1台</li><li>电脑1台</li><li>USB数据线1根</li></ul><h2 id="1-事前准备-已安装过的可以跳过"><a href="#1-事前准备-已安装过的可以跳过" class="headerlink" title="1. 事前准备(已安装过的可以跳过)"></a>1. 事前准备(已安装过的可以跳过)</h2><p>无论是解锁还是Root，都需要在电脑上安装驱动，以及ADB工具。</p><h3 id="1-1-安装驱动-电脑端"><a href="#1-1-安装驱动-电脑端" class="headerlink" title="1.1 安装驱动[电脑端]"></a>1.1 安装驱动[电脑端]</h3><p>驱动下载页面：<a href="https://developer.android.com/studio/run/win-usb">Google USB Driver</a></p><p>在页面中找到“Download the Google USB Driver ZIP file (ZIP)”，点击即可下载。</p><p>下载完成后解压，找到“android_winusb.inf”文件，右键点击安装。</p><p><img src="/posts/f9eadd70/C5AE51B9759104A7C2FD5BA63CEB91BA.webp" alt="安装驱动图"></p><h3 id="1-2-下载ADB工具-电脑端"><a href="#1-2-下载ADB工具-电脑端" class="headerlink" title="1.2 下载ADB工具[电脑端]"></a>1.2 下载ADB工具[电脑端]</h3><p>ADB工具下载页面：<a href="https://developer.android.com/studio/releases/platform-tools">ADB工具下载</a></p><p>下载完成后解压，将解压后的文件夹放到一个方便的位置。</p><p>之后需要在命令窗口执行的adb.exe命令和fastboot.exe命令，都在这个文件夹中。</p><p>※ 打开命令窗口方法：在文件夹空白处按住Shift键，同时右键点击鼠标，选择“在此处打开Powershell窗口”即可。</p><p>※ 如果要在命令窗口中直接执行adb命令，需要将这个文件夹的路径添加到系统环境变量中。</p><h2 id="2-解锁"><a href="#2-解锁" class="headerlink" title="2. 解锁"></a>2. 解锁</h2><h3 id="2-1-开启OEM解锁及USB调试-手机端"><a href="#2-1-开启OEM解锁及USB调试-手机端" class="headerlink" title="2.1 开启OEM解锁及USB调试[手机端]"></a>2.1 开启OEM解锁及USB调试[手机端]</h3><p>在手机设置中找到“关于手机”-“版本号”，连续点击7次，即可开启开发者选项。</p><p>在“开发者选项”中找到“OEM解锁”，开启。</p><p>※ 如果OEM开关无法开启，说明该手机不支持解锁Bootloader，无法继续解锁和Root。</p><p>在“开发者选项”中找到“USB调试”，开启。</p><p>将手机连接到电脑，会弹出提示：“是否允许USB调试”，选择“允许”(可以把“一律允许”打勾)。</p><h3 id="2-2-解锁Bootloader-电脑端"><a href="#2-2-解锁Bootloader-电脑端" class="headerlink" title="2.2 解锁Bootloader[电脑端]"></a>2.2 解锁Bootloader[电脑端]</h3><ol><li><p>确认手机连接状况，打开命令窗口，输入以下命令：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb devices</span><br></pre></td></tr></tbody></table></figure><p> 如果显示设备号，代表手机已经连接成功。<br> 如果没有显示设备号，可能是电脑的驱动没有安装好，或者USB数据线/口，或者手机端没打开USB调试，请检查。</p></li><li><p>输入以下命令来重启手机进入bootloader模式：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader</span><br></pre></td></tr></tbody></table></figure></li><li><p>输入以下命令来解锁Bootloader：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot flashing unlock</span><br></pre></td></tr></tbody></table></figure><p> ※ 注意：该命令与旧版不同，旧版命令为：fastboot oem unlock。</p><p> 执行后，手机会显示解锁提示，按音量键切换选项，选择“unlock”，按电源键确认。</p><p> 手机会自动重启，这时候手机的Bootloader已经解锁成功，启动时会有已解锁的英文界面提示。</p><p> 解锁后手机数据会被清空，所以解锁前要提前备份好手机数据。</p><p> ※ 解锁后需要重新开启USB调试，以便后续Root。</p></li></ol><h2 id="3-Root"><a href="#3-Root" class="headerlink" title="3. Root"></a>3. Root</h2><h3 id="3-1-下载镜像文件-电脑端"><a href="#3-1-下载镜像文件-电脑端" class="headerlink" title="3.1 下载镜像文件[电脑端]"></a>3.1 下载镜像文件[电脑端]</h3><p>打开镜像文件下载地址：<br><a href="https://developers.google.com/android/images">https://developers.google.com/android/images</a></p><p>找到对应的Pixel 7a的最新镜像文件，下载解压(注意：要下载全量镜像，不要下载OTA镜像)。</p><h3 id="3-2-刷入最新系统镜像-电脑端"><a href="#3-2-刷入最新系统镜像-电脑端" class="headerlink" title="3.2 刷入最新系统镜像[电脑端]"></a>3.2 刷入最新系统镜像[电脑端]</h3><p>※ 该步骤为了确保手机当前系统版本和你下载的镜像版本一致，以免刷入后出现问题变砖。</p><p>保持手机与电脑连接，打开命令窗口，输入以下命令进入bootloader模式：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader</span><br></pre></td></tr></tbody></table></figure><p>在解压出来的镜像文件夹中找到flash-all.bat文件，双击运行。</p><p>这个脚本文件会自动刷入解压出来的系统镜像，刷入完成后手机会自动重启。</p><p><img src="/posts/f9eadd70/20240411161142.webp" alt="刷入系统镜像图"></p><p>※ 注意：刷入镜像后手机数据会被清空，所以刷入前要提前备份好手机数据。</p><p>※ 刷入镜像后需要重新开启USB调试，以便后续Root。</p><h3 id="3-3-解压出镜像文件中的init-boot-img-电脑端"><a href="#3-3-解压出镜像文件中的init-boot-img-电脑端" class="headerlink" title="3.3 解压出镜像文件中的init_boot.img[电脑端]"></a>3.3 解压出镜像文件中的init_boot.img[电脑端]</h3><p>在解压出来的镜像文件夹中，找到zip文件(名字类似：image-lynx-ap1a.240405.002.zip)，解压。</p><p>在解压出来的文件中找到init_boot.img，这个文件是我们接下来需要用到的，把它传到【手机】中的download文件夹中。</p><p>※ 新版Pixel手机root用到的是init_boot.img，不再是旧版用到的boot.img。</p><p><img src="/posts/f9eadd70/20240411161143.webp" alt="init_boot图片"></p><h3 id="3-4-安装Magisk-Manager，对init-boot-img进行patch-手机端"><a href="#3-4-安装Magisk-Manager，对init-boot-img进行patch-手机端" class="headerlink" title="3.4 安装Magisk Manager，对init_boot.img进行patch[手机端]"></a>3.4 安装Magisk Manager，对init_boot.img进行patch[手机端]</h3><p>打开 <a href="https://github.com/topjohnwu/Magisk/releases">https://github.com/topjohnwu/Magisk/releases</a> ，<br>下载最新的Magisk Manager APK。</p><p>打开Magisk Manager，选择Magisk右边的“安装”-“选择并修补一个文件”，<br>选择刚才传到手机download文件夹的init_boot.img。</p><p>这样patch后的会生成一个新文件，保存在download文件夹中。<br>新文件命名一般类似：magisk_patched-25200_sZBNk.img。</p><p>将其传到电脑中待会儿用。</p><h3 id="3-4-刷入patch后的init-boot-img-电脑端"><a href="#3-4-刷入patch后的init-boot-img-电脑端" class="headerlink" title="3.4 刷入patch后的init_boot.img[电脑端]"></a>3.4 刷入patch后的init_boot.img[电脑端]</h3><p>保持手机与电脑连接，打开命令窗口，输入以下命令进入bootloader模式：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb reboot bootloader</span><br></pre></td></tr></tbody></table></figure><p>输入以下命令刷入patch后的init_boot.img：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot flash init_boot magisk_patched-25200_sZBNk.img # 改成你的文件名</span><br></pre></td></tr></tbody></table></figure><p>刷入完成后，输入以下命令重启手机：</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot reboot</span><br></pre></td></tr></tbody></table></figure><h3 id="3-5-验证Root-手机端"><a href="#3-5-验证Root-手机端" class="headerlink" title="3.5 验证Root[手机端]"></a>3.5 验证Root[手机端]</h3><p>重启手机后，打开Magisk Manager，即可看到已经root成功。</p><h2 id="4-结束"><a href="#4-结束" class="headerlink" title="4. 结束"></a>4. 结束</h2><p>至此，Pixel 7a解锁并Root完成。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 教程 </tag>
+            
+            <tag> Pixel </tag>
+            
+            <tag> 手机 </tag>
+            
+            <tag> Root </tag>
+            
+            <tag> 刷机 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>常用字幕资源查找方法</title>
+      <link href="/posts/5e3e38ac/"/>
+      <url>/posts/5e3e38ac/</url>
+      
+        <content type="html"><![CDATA[<p>下载了一部电影或者剧集，发现没有字幕，或者字幕不全，怎么办？本文将介绍几种常用的字幕查找方法，帮助你快速找到适合的字幕。</p><h2 id="1-字幕网站"><a href="#1-字幕网站" class="headerlink" title="1. 字幕网站"></a>1. 字幕网站</h2><p>字幕网站是最常用的字幕查找方法，国内外有很多字幕网站，提供各种类型的字幕下载。常用的字幕网站有：</p><h3 id="射手网-伪"><a href="#射手网-伪" class="headerlink" title="射手网(伪)"></a><a href="https://assrt.net/">射手网(伪)</a></h3><p>射手网伪（assrt.net）是一个专注于提供免费音视频字幕下载的网站。它不仅为用户提供了丰富的字幕资源下载、上传、翻译和编辑功能，还搭建了一个字幕爱好者的交流平台。目前，网站拥有超过41万个字幕和205万个相关文件，覆盖了多种语言和类型的影视作品。</p><p>网站内容涵盖了美剧、英剧、双语、电影等，接口简洁友好，不需要登录就可以进行字幕的搜索以及下载。字幕搜索结果支持评分、相关度排序，每条搜索结果都有字幕来源、字幕格式、字幕语种、字幕评分等信息。</p><p>射手网伪与原射手网在设计上非常相似，仅在Logo旁增加了“伪”字。</p><h3 id="字幕库"><a href="#字幕库" class="headerlink" title="字幕库"></a><a href="https://zmk.pw/">字幕库</a></h3><p>字幕库是一个专业的字幕下载网站，提供丰富的电影、电视剧字幕资源。用户可以在这个平台上搜索和下载所需的字幕，同时也可以上传自己制作的字幕与他人分享。字幕库每天都会更新最新的国外影视剧字幕，包括英语、中文简体、中文繁体等多种语言版本。所有的字幕资源都是由国内知名的字幕组提供的，确保了字幕的质量和准确性⁵。</p><h3 id="SubHD"><a href="#SubHD" class="headerlink" title="SubHD"></a><a href="https://subhd.tv/">SubHD</a></h3><p>SubHD.tv 是一个提供丰富字幕资源的网站，它拥有各种版本的外国电视剧字幕，基本可以满足你的观看需求。网站内容包括国外的电影、电视剧，以及动漫，并且更新速度非常快，每天都有新内容更新。</p><h3 id="A4k"><a href="#A4k" class="headerlink" title="A4k"></a><a href="https://www.a4k.net/">A4k</a></h3><p>A4K字幕网是一个提供丰富字幕资源的网站，主要以简体中文字幕为主，同时也提供繁体中文和英文字幕。用户可以在这个平台上搜索和下载所需的字幕，也可以上传自己制作的字幕与他人分享。</p><h2 id="2-字幕下载工具"><a href="#2-字幕下载工具" class="headerlink" title="2. 字幕下载工具"></a>2. 字幕下载工具</h2><p>除了字幕网站，还有一些字幕下载工具可以帮助你快速找到适合的字幕。</p><h3 id="ChineseSubFinder"><a href="#ChineseSubFinder" class="headerlink" title="ChineseSubFinder"></a><a href="https://github.com/ChineseSubFinder/ChineseSubFinder">ChineseSubFinder</a></h3><p>自动化中文字幕下载。字幕网站支持 shooter、xunlei、arrst、a4k、SubtitleBest 。支持 Emby、Jellyfin、Plex、Sonarr、Radarr、TMM。支持 Windows、Linux、macOS。</p><h3 id="字幕共享计划-SubtitlesDataBase"><a href="#字幕共享计划-SubtitlesDataBase" class="headerlink" title="字幕共享计划-SubtitlesDataBase"></a><a href="https://github.com/foxofice/sub_share">字幕共享计划-SubtitlesDataBase</a></h3><p>此计划是为了改进目前字幕的共享和下载方式，让共享字幕、搜索字幕、下载字幕变得更简便，制作了Subtitles DataBase工具。</p><h2 id="3-字幕社区"><a href="#3-字幕社区" class="headerlink" title="3. 字幕社区"></a>3. 字幕社区</h2><p>字幕社区通常是一些字幕爱好者组成的社区，他们会自愿翻译、制作字幕，并分享给其他人。在这些社区中，你可以找到一些独特的字幕资源。</p><h3 id="Anime字幕论坛"><a href="#Anime字幕论坛" class="headerlink" title="Anime字幕论坛"></a><a href="https://bbs.acgrip.com/">Anime字幕论坛</a></h3><p>Anime字幕论坛是一个专注于动漫字幕的论坛，寻找动画字幕的朋友可以在这里找到自己需要的字幕资源。</p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>以上就是常用的字幕查找方法，希望对你有所帮助。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 影音娱乐 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 视频 </tag>
+            
+            <tag> 资源 </tag>
+            
+            <tag> 字幕 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Windows终端的一点点二次元化</title>
+      <link href="/posts/5bc9bf5/"/>
+      <url>/posts/5bc9bf5/</url>
+      
+        <content type="html"><![CDATA[<p>在此前的文章中，我们已经进行了Windows Terminal终端的美化、易用化改造，<br>现在我们来实现一点点二次元化改造。</p><p>前情提要：</p><ul><li><a href="/posts/a8a8e99/">Windows Terminal终端的美化</a></li></ul><h2 id="1-增加背景图片"><a href="#1-增加背景图片" class="headerlink" title="1. 增加背景图片"></a>1. 增加背景图片</h2><p>在Windows Terminal中增加背景图片，可以让终端更加个性化。</p><ul><li>在Windows Terminal标题栏中点击下拉菜单，选择“设置”<ul><li>在“设置”界面中找到“配置文件”下的默认值项，点击默认值界面中的“外观”</li><li>点击“背景图像”下的“背景图片路径”，选择一张图片即可(可以是动图)</li><li>可以调整“拉伸”、“对齐模式”和“不透明度”，建议调整到合适的位置和透明度，尽量不影响终端的使用</li></ul></li></ul><p>效果如下：<br><img src="/posts/5bc9bf5/%E7%BB%88%E7%AB%AF%E8%83%8C%E6%99%AF.gif" alt="效果"></p><h2 id="2-启动时显示表情"><a href="#2-启动时显示表情" class="headerlink" title="2. 启动时显示表情"></a>2. 启动时显示表情</h2><p>在Windows Terminal启动时显示表情，可以让终端更加有趣。</p><h3 id="2-1-创建一个专门用来显示表情的脚本"><a href="#2-1-创建一个专门用来显示表情的脚本" class="headerlink" title="2.1 创建一个专门用来显示表情的脚本"></a>2.1 创建一个专门用来显示表情的脚本</h3><p>在Windows Terminal中显示表情，需要借助于PowerShell脚本，我们可以创建一个专门用来显示表情的脚本。<br>新建一个<code>showEmoji.ps1</code>文件，内容如下：</p><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$isRandom</span> = <span class="number">1</span> <span class="comment"># 随机开关 1:打开 0:关闭</span></span><br><span class="line"><span class="comment"># 显示星期</span></span><br><span class="line"><span class="variable">$week</span> = <span class="built_in">get-date</span> <span class="literal">-format</span> <span class="string">"yyyy-MM-dd HH:mm dddd"</span></span><br><span class="line"><span class="built_in">Write-Output</span> <span class="variable">$week</span></span><br><span class="line"><span class="comment"># 显示字符画</span></span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$isRandom</span>) {</span><br><span class="line">    <span class="comment"># 随机显示</span></span><br><span class="line">    <span class="variable">$imgNum</span> = <span class="built_in">Get-Random</span> <span class="literal">-Minimum</span> <span class="number">1</span> <span class="literal">-Maximum</span> <span class="number">7</span></span><br><span class="line">} <span class="keyword">else</span> {</span><br><span class="line">    <span class="comment"># 按照星期显示</span></span><br><span class="line">    <span class="variable">$imgNum</span> = (<span class="built_in">Get-Date</span>).DayOfWeek</span><br><span class="line">}</span><br><span class="line"><span class="keyword">switch</span> (<span class="variable">$imgNum</span>) {</span><br><span class="line">    { <span class="variable">$_</span> <span class="operator">-eq</span> <span class="number">1</span> } {</span><br><span class="line">        <span class="comment"># 周一</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"吾輩はやれば出来る子💪である。 "</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"        ∩∩"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"      （´･ω･）"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"     ＿|  ⊃／(＿＿＿"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"   ／   └-(＿＿＿_／"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"   ￣￣￣￣￣￣￣"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  やる気はまだない😴"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">""</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"     ⊂⌒／ヽ-、＿_"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  ／⊂_/＿＿＿＿ ／"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  ￣￣￣￣￣￣￣"</span></span><br><span class="line">    }</span><br><span class="line">    { <span class="variable">$_</span> <span class="operator">-eq</span> <span class="number">2</span> } {</span><br><span class="line">        <span class="comment"># 周二</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"💡なるほと、バッグ🐞の解決方法分かる"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"〃∩ ∧＿∧ "</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"⊂⌒(  ･ω･) "</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  ＼_っ⌒/⌒c "</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"      ⌒ ⌒"</span></span><br><span class="line">    }</span><br><span class="line">    { <span class="variable">$_</span> <span class="operator">-eq</span> <span class="number">3</span> } {</span><br><span class="line">        <span class="comment"># 周三</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"少し休んで🍵お茶しましょう"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"         （⌒)"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"    ∧__∧ （~)"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  （｡･ω･｡)( )"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  {￣￣￣￣}"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  {~￣お_＿} ぬるい"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  {~￣茶_＿}"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  {＿＿＿＿}"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"     ┗━━┛"</span></span><br><span class="line">    }</span><br><span class="line">    { <span class="variable">$_</span> <span class="operator">-eq</span> <span class="number">4</span> } {</span><br><span class="line">        <span class="comment"># 周四</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"まぁ、座れや"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"           ∧,,_∧"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"        ⊂ ( ･ω･ )つ-"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"      ／／/     /::/"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"      |::|/⊂ヽノ|::|」"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"   ／￣￣旦￣￣￣／|"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">" ／＿＿＿＿＿＿／  |"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">" |-------------| ／"</span></span><br><span class="line">    }</span><br><span class="line">    { <span class="variable">$_</span> <span class="operator">-eq</span> <span class="number">5</span> } {</span><br><span class="line">        <span class="comment"># 周五</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"土曜日未だ来たかい?"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                        ∧∧  ∩"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                      ( ﾟ∀ﾟ)/  ｷﾀ━━━━━━(ﾟ∀ﾟ)━━━━━━!!!!"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                     ⊂     ﾉ"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                      (つ ﾉ"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"    o                  (ノ"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"      ＼            ☆"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                      |           o"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                (⌒ ⌒ヽ      /         ☆"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"    ＼    （´⌒    ⌒    ⌒ヾ      ／"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"       （'⌒  ;  ⌒      ::⌒    ）"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"      （´          ）          :::  ）  ／"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"☆─  （´⌒;:        ::⌒`）  :;    ）"</span></span><br><span class="line">        </span><br><span class="line">    }</span><br><span class="line">    Default {</span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"🎶魔法使い希落凛🧙、行きます🎶"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"  ∧＿∧ "</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"（｡･ω･｡)つ━☆・*。"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"⊂     ノ       ・゜+."</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">" しーＪ      °。+ *´¨)"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                  .· ´¸.·*´¨) ¸.·*¨)"</span></span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">"                    (¸.·´ (¸.·'* ☆"</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure><p>把<code>showEmoji.ps1</code>文件放到一个固定的位置，例如$PROFILE所在目录下。<br>打开PowerShell，输入<code>$PROFILE</code>，可以看到PowerShell的配置文件所在的路径。</p><h3 id="2-2-设置Windows-Terminal启动时运行脚本"><a href="#2-2-设置Windows-Terminal启动时运行脚本" class="headerlink" title="2.2 设置Windows Terminal启动时运行脚本"></a>2.2 设置Windows Terminal启动时运行脚本</h3><p>编辑$PROFILE配置文件，添加如下内容：</p><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$EMOJI_FILE_NAME</span> = <span class="string">"showEmoji.ps1"</span></span><br><span class="line"><span class="variable">$PROFILE_PATH</span> = <span class="built_in">Split-Path</span> <span class="variable">$PROFILE</span></span><br><span class="line"><span class="variable">$EMOJI_FILE_PATH</span> = <span class="variable">$PROFILE_PATH</span> + <span class="string">"\"</span> + <span class="variable">$EMOJI_FILE_NAME</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">Test-Path</span> <span class="variable">$EMOJI_FILE_PATH</span>)  {</span><br><span class="line">    . <span class="variable">$EMOJI_FILE_PATH</span></span><br><span class="line">}</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure><p>效果如下：<br><img src="/posts/5bc9bf5/emoji.webp" alt="效果"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 美化 </tag>
+            
+            <tag> Windows </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hexo 插入图片配置</title>
+      <link href="/posts/48adea7c/"/>
+      <url>/posts/48adea7c/</url>
+      
+        <content type="html"><![CDATA[<p>Hexo使用Markdown语法编写文章时，<br>默认插入图片的方式较为麻烦，<br>需要将图片放在<code>source</code>目录下，然后使用绝对路径引用图片。<br>本文将介绍如何使用插件并配置Hexo插入图片的路径，使得插入图片更加方便。</p><h2 id="1-安装插件hexo-renderer-marked"><a href="#1-安装插件hexo-renderer-marked" class="headerlink" title="1. 安装插件hexo-renderer-marked"></a>1. 安装插件hexo-renderer-marked</h2><p>插件hexo-renderer-marked解决了Hexo中Markdown图片路径引用的问题，安装方法如下：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-marked --save</span><br></pre></td></tr></tbody></table></figure><h2 id="2-配置Hexo插入图片路径"><a href="#2-配置Hexo插入图片路径" class="headerlink" title="2. 配置Hexo插入图片路径"></a>2. 配置Hexo插入图片路径</h2><p>在Hexo的配置文件<code>_config.yml</code>中添加以下配置：</p><figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">marked:</span></span><br><span class="line">  <span class="attr">prependRoot:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">postAsset:</span> <span class="literal">true</span></span><br></pre></td></tr></tbody></table></figure><p>这样配置后，使用命令<code>hexo new "文章标题"</code>创建新文章时，Hexo会自动在文章目录下创建一个与文章同名的文件夹，用于存放文章中的图片。</p><h2 id="3-插入图片示例"><a href="#3-插入图片示例" class="headerlink" title="3. 插入图片示例"></a>3. 插入图片示例</h2><h3 id="3-1-创建文章"><a href="#3-1-创建文章" class="headerlink" title="3.1 创建文章"></a>3.1 创建文章</h3><p>使用以下命令创建新文章：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new <span class="string">"测试文章"</span></span><br></pre></td></tr></tbody></table></figure><h3 id="3-2-放入图片"><a href="#3-2-放入图片" class="headerlink" title="3.2 放入图片"></a>3.2 放入图片</h3><p>将图片 test.png 放入目录<code>source/_posts/测试文章</code>文件夹中。</p><h3 id="3-3-插入图片"><a href="#3-3-插入图片" class="headerlink" title="3.3 插入图片"></a>3.3 插入图片</h3><p>在文章中插入图片时，使用相对路径即可，示例如下：</p><figure class="highlight markdown"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">测试图片</span>](<span class="link">test.png</span>)</span><br></pre></td></tr></tbody></table></figure><h3 id="3-4-重新生成静态文件"><a href="#3-4-重新生成静态文件" class="headerlink" title="3.4 重新生成静态文件"></a>3.4 重新生成静态文件</h3><p>在配置完成后，需要重新生成静态文件，使用以下命令：</p><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g</span><br></pre></td></tr></tbody></table></figure><h3 id="4-完成"><a href="#4-完成" class="headerlink" title="4. 完成"></a>4. 完成</h3><p>以上就是在Hexo中插入图片的配置方法，希望对你有所帮助！</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> 图片 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Windows终端的美化、易用化改造</title>
+      <link href="/posts/a8a8e99/"/>
+      <url>/posts/a8a8e99/</url>
+      
+        <content type="html"><![CDATA[<p>用来记录Windows平台Terminal终端的美化、易用化改造过程。<br>目标：以安装Oh My Posh(v3)和主题来美化，加入posh-git来增强终端补全、历史记录等功能，最终实现一个美观、易用的终端。<br>平台：Windows 10|11</p><h2 id="1-安装Windows-Terminal"><a href="#1-安装Windows-Terminal" class="headerlink" title="1. 安装Windows Terminal"></a>1. 安装Windows Terminal</h2><p>微软商店搜索Windows Terminal，安装即可。</p><h2 id="2-使用管理员权限启动Windows-Terminal并允许执行脚本"><a href="#2-使用管理员权限启动Windows-Terminal并允许执行脚本" class="headerlink" title="2. 使用管理员权限启动Windows Terminal并允许执行脚本"></a>2. 使用管理员权限启动Windows Terminal并允许执行脚本</h2><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Set-ExecutionPolicy</span> RemoteSigned <span class="literal">-Scope</span> CurrentUser</span><br></pre></td></tr></tbody></table></figure><h2 id="3-升级PowerShell-Core"><a href="#3-升级PowerShell-Core" class="headerlink" title="3. 升级PowerShell Core"></a>3. 升级PowerShell Core</h2><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">winget install Microsoft.PowerShell</span><br></pre></td></tr></tbody></table></figure><h2 id="4-安装Oh-My-Posh"><a href="#4-安装Oh-My-Posh" class="headerlink" title="4. 安装Oh My Posh"></a>4. 安装Oh My Posh</h2><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">winget install JanDeDobbeleer.OhMyPosh <span class="literal">-s</span> winget</span><br></pre></td></tr></tbody></table></figure><h2 id="5-安装posh-git"><a href="#5-安装posh-git" class="headerlink" title="5. 安装posh-git"></a>5. 安装posh-git</h2><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Install-Module</span> posh<span class="literal">-git</span> <span class="literal">-Scope</span> CurrentUser <span class="literal">-Force</span></span><br></pre></td></tr></tbody></table></figure><h2 id="6-配置PowerShell"><a href="#6-配置PowerShell" class="headerlink" title="6. 配置PowerShell"></a>6. 配置PowerShell</h2><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 判断是否存在配置文件，不存在则创建</span></span><br><span class="line"><span class="keyword">if</span> (!(<span class="built_in">Test-Path</span> <span class="literal">-Path</span> <span class="variable">$PROFILE</span> )) { <span class="built_in">New-Item</span> <span class="literal">-Type</span> File <span class="literal">-Path</span> <span class="variable">$PROFILE</span> <span class="literal">-Force</span> }</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打开配置文件</span></span><br><span class="line">notepad <span class="variable">$PROFILE</span></span><br></pre></td></tr></tbody></table></figure><p>在配置文件中添加以下内容：</p><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导入posh-git</span></span><br><span class="line"><span class="built_in">Import-Module</span> posh<span class="literal">-git</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化 oh-my-posh 并指定主题，本文使用mojada这个主题，更多主题样式可以使用命令Get-PoshThemes查看</span></span><br><span class="line"><span class="built_in">oh</span><span class="literal">-my-posh</span> init pwsh <span class="literal">--config</span> <span class="string">"<span class="variable">$env:POSH_THEMES_PATH</span>/mojada.omp.json"</span> | <span class="built_in">Invoke-Expression</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置窗口标题</span></span><br><span class="line"><span class="built_in">Set-PSReadlineKeyHandler</span> <span class="literal">-Key</span> Tab <span class="literal">-Function</span> MenuComplete</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Autocompletion for arrow keys</span></span><br><span class="line"><span class="built_in">Set-PSReadlineKeyHandler</span> <span class="literal">-Key</span> UpArrow <span class="literal">-Function</span> HistorySearchBackward</span><br><span class="line"><span class="built_in">Set-PSReadlineKeyHandler</span> <span class="literal">-Key</span> DownArrow <span class="literal">-Function</span> HistorySearchForward</span><br><span class="line"></span><br><span class="line"><span class="comment"># PSReadLine 是一个内置的模块，可以通过上下键和tab键来快速输入历史记录</span></span><br><span class="line"><span class="built_in">Import-Module</span> PSReadLine</span><br><span class="line"><span class="built_in">Set-PSReadLineOption</span> <span class="literal">-PredictionSource</span> <span class="built_in">History</span></span><br></pre></td></tr></tbody></table></figure><h2 id="7-手动加载配置"><a href="#7-手动加载配置" class="headerlink" title="7. 手动加载配置"></a>7. 手动加载配置</h2><figure class="highlight powershell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">. <span class="variable">$PROFILE</span></span><br></pre></td></tr></tbody></table></figure><h2 id="8-安装字体"><a href="#8-安装字体" class="headerlink" title="8. 安装字体"></a>8. 安装字体</h2><p>加载完配置后，如果看到一些图标乱码，<br>说明系统缺少字体支持，<br>因为主题需要特定的字体(Nerd Fonts 家族字体)支持，所以需要安装字体。</p><p>下面以安装中文友好的【Sarasa Term SC Nerd 字体】为例：<br>※ 字体介绍：<a href="https://github.com/laishulu/Sarasa-Term-SC-Nerd">https://github.com/laishulu/Sarasa-Term-SC-Nerd</a></p><h3 id="8-1-下载字体包"><a href="#8-1-下载字体包" class="headerlink" title="8.1 下载字体包"></a>8.1 下载字体包</h3><p><a href="https://github.com/laishulu/Sarasa-Term-SC-Nerd/releases/download/v1.1.0/sarasa-term-sc-nerd.ttf.7z">下载地址(v1.1.0)</a></p><h3 id="8-2-解压字体包并安装"><a href="#8-2-解压字体包并安装" class="headerlink" title="8.2 解压字体包并安装"></a>8.2 解压字体包并安装</h3><p>解压后，右键字体文件，选择安装即可。</p><h3 id="8-3-设置Windows-Terminal字体"><a href="#8-3-设置Windows-Terminal字体" class="headerlink" title="8.3 设置Windows Terminal字体"></a>8.3 设置Windows Terminal字体</h3><p>有2种方式设置字体，任选其一即可：</p><ol><li><p>在Windows Terminal的设置界面中设置：</p><ul><li>在Windows Terminal标题栏中点击下拉菜单，选择“设置”</li><li>在“设置”界面中找到“配置文件”下的默认值项，点击默认值界面中的“外观”</li><li>在“外观”界面中找到“字体”，选择“终端更纱黑体-简 Nerd”</li><li>点击右下角的“保存”按钮保存设置</li></ul></li><li><p>在Windows Terminal的配置文件中设置：</p><ul><li>在Windows Terminal标题栏中点击下拉菜单，选择“设置”</li><li>点击“打开JSON文件”，打开配置文件</li><li>在配置文件中找到“profiles”下的“defaults”项，添加“face”属性，值为“终端更纱黑体-简 Nerd”<figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"profiles"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"defaults"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">            <span class="attr">"face"</span><span class="punctuation">:</span> <span class="string">"终端更纱黑体-简 Nerd"</span></span><br><span class="line">        <span class="punctuation">}</span></span><br><span class="line">    <span class="punctuation">}</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure></li><li>保存配置文件</li></ul></li></ol><h2 id="9-Windows-Terminal的其他设置（可选）"><a href="#9-Windows-Terminal的其他设置（可选）" class="headerlink" title="9. Windows Terminal的其他设置（可选）"></a>9. Windows Terminal的其他设置（可选）</h2><p>在Windows Terminal的设置界面中，可以设置主题、背景、透明度等<br>以下是一些个人推荐的设置：</p><p>同样是可以在配置文件中设置，也可以在设置界面中设置，这里以配置文件为例：</p><figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    ......</span><br><span class="line">    <span class="comment">// 选中复制</span></span><br><span class="line">    <span class="attr">"copyOnSelect"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    ......</span><br><span class="line">    <span class="attr">"profiles"</span><span class="punctuation">:</span> </span><br><span class="line">    <span class="punctuation">{</span></span><br><span class="line">        <span class="attr">"defaults"</span><span class="punctuation">:</span> </span><br><span class="line">        <span class="punctuation">{</span></span><br><span class="line">            <span class="comment">// 颜色主题</span></span><br><span class="line">            <span class="attr">"colorScheme"</span><span class="punctuation">:</span> <span class="string">"One Half Dark"</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 光标形状</span></span><br><span class="line">            <span class="attr">"cursorShape"</span><span class="punctuation">:</span> <span class="string">"bar"</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 字体</span></span><br><span class="line">            <span class="attr">"font"</span><span class="punctuation">:</span> </span><br><span class="line">            <span class="punctuation">{</span></span><br><span class="line">                <span class="attr">"face"</span><span class="punctuation">:</span> <span class="string">"终端更纱黑体-简 Nerd"</span></span><br><span class="line">            <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 标签图标(我用了github的头像)</span></span><br><span class="line">            <span class="attr">"icon"</span><span class="punctuation">:</span> <span class="string">"图片url"</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 不透明度(0~100，缺省值100，低于100则有毛玻璃效果，越低越透明)</span></span><br><span class="line">            <span class="attr">"opacity"</span><span class="punctuation">:</span> <span class="number">80</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 标签标题</span></span><br><span class="line">            <span class="attr">"tabTitle"</span><span class="punctuation">:</span> <span class="string">"Shirolin's terminal"</span><span class="punctuation">,</span></span><br><span class="line">            <span class="comment">// 使用亚克力效果</span></span><br><span class="line">            <span class="attr">"useAcrylic"</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">        <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">        ......</span><br><span class="line">    <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">    ......</span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure><h2 id="10-完成"><a href="#10-完成" class="headerlink" title="10. 完成"></a>10. 完成</h2><p>至此，Windows Terminal的美化、易用化改造完成。</p><p>效果如下：<br><img src="/posts/a8a8e99/windows%E7%BB%88%E7%AB%AF.webp" alt="效果"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 美化 </tag>
+            
+            <tag> Windows </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>尝试用Hexo搭建博客</title>
+      <link href="/posts/52028/"/>
+      <url>/posts/52028/</url>
+      
+        <content type="html"><![CDATA[<p>第一篇博客，用来记录Hexo的搭建过程。</p><h2 id="1-安装Hexo"><a href="#1-安装Hexo" class="headerlink" title="1. 安装Hexo"></a>1. 安装Hexo</h2><p>安装Hexo的过程很简单，按照官方教程一步一步来就可以了。</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></tbody></table></figure><h2 id="2-初始化项目"><a href="#2-初始化项目" class="headerlink" title="2. 初始化项目"></a>2. 初始化项目</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;project-name&gt;</span><br><span class="line">cd &lt;project-name&gt;</span><br><span class="line">npm install</span><br></pre></td></tr></tbody></table></figure><h2 id="3-部署到GitHub-Pages"><a href="#3-部署到GitHub-Pages" class="headerlink" title="3. 部署到GitHub Pages"></a>3. 部署到GitHub Pages</h2><h3 id="3-1-创建仓库"><a href="#3-1-创建仓库" class="headerlink" title="3.1 创建仓库"></a>3.1 创建仓库</h3><p>在GitHub上创建一个仓库，仓库名为<code>&lt;username&gt;.github.io</code>，其中<code>&lt;username&gt;</code>为你的GitHub用户名。</p><h3 id="3-2-配置ssh密钥"><a href="#3-2-配置ssh密钥" class="headerlink" title="3.2 配置ssh密钥"></a>3.2 配置ssh密钥</h3><p>※ 若已配置过ssh密钥，可跳过此步骤。</p><p>在本地生成ssh密钥：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa -C "用户名@example.com"</span><br></pre></td></tr></tbody></table></figure><p>将生成的公钥<code>~/.ssh/id_rsa.pub</code>添加到GitHub的SSH Keys中：</p><p><a href="https://github.com/settings/keys">https://github.com/settings/keys</a></p><h3 id="3-3-配置项目"><a href="#3-3-配置项目" class="headerlink" title="3.3 配置项目"></a>3.3 配置项目</h3><p>修改Hexo项目根目录下的<code>_config.yml</code>文件，将<code>deploy</code>部分修改为：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repo: git@github.com:&lt;username&gt;/&lt;username&gt;.github.io.git</span><br><span class="line">  branch: gh-pages</span><br></pre></td></tr></tbody></table></figure><h3 id="3-4-部署"><a href="#3-4-部署" class="headerlink" title="3.4 部署"></a>3.4 部署</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></tbody></table></figure><h2 id="4-配置GitHub-Pages"><a href="#4-配置GitHub-Pages" class="headerlink" title="4. 配置GitHub Pages"></a>4. 配置GitHub Pages</h2><p>上一步部署成功后，代码已经上传到GitHub上了，但是还不能通过<code>&lt;username&gt;.github.io</code>访问，还需要进行一些配置。</p><p>此时仓库会出现新的分支<code>gh-pages</code>，此分支中的内容会被GitHub Pages服务自动部署。</p><p>在GitHub上进入仓库的<code>Settings</code>页面，找到<code>GitHub Pages</code>部分，将<code>Source</code>修改为<code>gh-pages branch</code>，点击<code>Save</code>按钮。 </p><p>一段时间后即可部署完成，此时即可通过<code>&lt;username&gt;.github.io</code>访问博客了。</p><p>※ 部署的进度可以在仓库的<code>Actions</code>页面查看。</p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>至此，一个简单的Hexo博客就搭建完成了，接下来就可以开始安装主题、修改配置以及写博客了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux安装nvm与node.js</title>
+      <link href="/posts/ed80609d/"/>
+      <url>/posts/ed80609d/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下安装nvm的过程。<br>平台：CentOS7 | Ubuntu 20.04</p><h2 id="1-安装nvm"><a href="#1-安装nvm" class="headerlink" title="1. 安装nvm"></a>1. 安装nvm</h2><p>curl方式：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash</span><br></pre></td></tr></tbody></table></figure><p>wget方式：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash</span><br></pre></td></tr></tbody></table></figure><p>git clone方式：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git://github.com/creationix/nvm.git ~/nvm</span><br></pre></td></tr></tbody></table></figure><h2 id="2-配置环境变量"><a href="#2-配置环境变量" class="headerlink" title="2. 配置环境变量"></a>2. 配置环境变量</h2><p>默认安装在<code>~/.nvm</code>目录下，并已经配置好环境变量，如果没有配置，需要手动配置环境变量。</p><p>根据自己的shell类型，修改对应的配置文件，添加如下内容：</p><p>bash：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.bashrc</span><br><span class="line">export NVM_DIR="$HOME/.nvm"</span><br><span class="line">[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" # This loads nvm</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure><p>zsh：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vi ~/.zshrc</span><br><span class="line">export NVM_DIR="$HOME/.nvm"</span><br><span class="line">[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; . "$NVM_DIR/nvm.sh" # This loads nvm</span><br></pre></td></tr></tbody></table></figure><h2 id="3-验证"><a href="#3-验证" class="headerlink" title="3. 验证"></a>3. 验证</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm --version</span><br></pre></td></tr></tbody></table></figure><h2 id="4-安装node-js"><a href="#4-安装node-js" class="headerlink" title="4. 安装node.js"></a>4. 安装node.js</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nvm install node # 安装最新版本</span><br><span class="line"></span><br><span class="line">nvm install 12.18.3 # 安装指定版本</span><br><span class="line"></span><br><span class="line">nvm install node --lts # 安装最新LTS版本</span><br></pre></td></tr></tbody></table></figure><h2 id="5-切换node版本"><a href="#5-切换node版本" class="headerlink" title="5. 切换node版本"></a>5. 切换node版本</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nvm use node # 切换到最新版本</span><br><span class="line"></span><br><span class="line">nvm use 12.18.3 # 切换到指定版本</span><br></pre></td></tr></tbody></table></figure><h2 id="6-查看已安装的node版本"><a href="#6-查看已安装的node版本" class="headerlink" title="6. 查看已安装的node版本"></a>6. 查看已安装的node版本</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm ls</span><br></pre></td></tr></tbody></table></figure><h2 id="7-卸载node"><a href="#7-卸载node" class="headerlink" title="7. 卸载node"></a>7. 卸载node</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm uninstall 12.18.3</span><br></pre></td></tr></tbody></table></figure><h2 id="8-查看可用的node版本"><a href="#8-查看可用的node版本" class="headerlink" title="8. 查看可用的node版本"></a>8. 查看可用的node版本</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm ls-remote</span><br></pre></td></tr></tbody></table></figure><h2 id="9-查看当前node版本"><a href="#9-查看当前node版本" class="headerlink" title="9. 查看当前node版本"></a>9. 查看当前node版本</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node -v</span><br></pre></td></tr></tbody></table></figure><h2 id="10-查看当前npm版本"><a href="#10-查看当前npm版本" class="headerlink" title="10. 查看当前npm版本"></a>10. 查看当前npm版本</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm -v</span><br></pre></td></tr></tbody></table></figure><h2 id="11-查看当前nvm版本"><a href="#11-查看当前nvm版本" class="headerlink" title="11. 查看当前nvm版本"></a>11. 查看当前nvm版本</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm --version</span><br></pre></td></tr></tbody></table></figure><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>以上。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> nvm </tag>
+            
+            <tag> node </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Linux 终端美化</title>
+      <link href="/posts/b0c9ad69/"/>
+      <url>/posts/b0c9ad69/</url>
+      
+        <content type="html"><![CDATA[<p>用来记录一些终端美化的方法。<br>平台：CentOS 7.6|Ubuntu 20.04</p><h2 id="1-安装zsh"><a href="#1-安装zsh" class="headerlink" title="1. 安装zsh"></a>1. 安装zsh</h2><p>ubuntu</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install zsh -y</span><br></pre></td></tr></tbody></table></figure><p><em>※ CentOS 安装高版本zsh请参考<a href="/posts/d7590978/">《centos 安装高版本zsh》</a></em></p><h2 id="2-安装Oh-My-Zsh"><a href="#2-安装Oh-My-Zsh" class="headerlink" title="2. 安装Oh My Zsh"></a>2. 安装Oh My Zsh</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</span><br></pre></td></tr></tbody></table></figure><h2 id="3-安装相关插件"><a href="#3-安装相关插件" class="headerlink" title="3. 安装相关插件"></a>3. 安装相关插件</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 语法高亮插件:zsh-syntax-highlighting</span><br><span class="line">git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br><span class="line"></span><br><span class="line"># 命令提示插件:zsh-autosuggestions</span><br><span class="line">git clone https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 主题插件:powerlevel10k</span><br><span class="line">git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k</span><br><span class="line"></span><br><span class="line"># 修改zsh配置</span><br><span class="line">sed -i 's/^plugins=(git)$/plugins=(git zsh-syntax-highlighting zsh-autosuggestions)/' ~/.zshrc</span><br><span class="line">sed -i 's/^ZSH_THEME="robbyrussell"$/ZSH_THEME="powerlevel10k\/powerlevel10k"/' ~/.zshrc</span><br></pre></td></tr></tbody></table></figure><h2 id="4-修改默认shell"><a href="#4-修改默认shell" class="headerlink" title="4.修改默认shell"></a>4.修改默认shell</h2><p>ubuntu</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh -s /bin/zsh</span><br></pre></td></tr></tbody></table></figure><p>centos</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chsh -s /usr/local/bin/zsh</span><br></pre></td></tr></tbody></table></figure><h2 id="5-重新进入终端后进行主题的初始配置"><a href="#5-重新进入终端后进行主题的初始配置" class="headerlink" title="5.重新进入终端后进行主题的初始配置"></a>5.重新进入终端后进行主题的初始配置</h2><blockquote><pre><code>                Does this look like a diamond (rotated square)?                  reference: https://graphemica.com/%E2%97%86                                 ---&gt;    &lt;---</code></pre><p>(y)  Yes.</p><p>(n)  No.</p><p>(q)  Quit and do nothing.</p><p>Choice [ynq]:</p></blockquote><p>一步一步根据自己的喜好选择即可。</p><h2 id="6-结束"><a href="#6-结束" class="headerlink" title="6.结束"></a>6.结束</h2><p>至此，终端美化完成。</p><p>效果如下：<br><img src="/posts/b0c9ad69/ubuntu%E7%BB%88%E7%AB%AF.webp" alt="效果"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> 美化 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>centos 安装高版本zsh</title>
+      <link href="/posts/d7590978/"/>
+      <url>/posts/d7590978/</url>
+      
+        <content type="html"><![CDATA[<p>Centos自带的yum源中，zsh已长期停留在5.0版本，而目前最新版本已经到了5.9，所以需要手动安装高版本的zsh。</p><h2 id="1-下载zsh源码"><a href="#1-下载zsh源码" class="headerlink" title="1. 下载zsh源码"></a>1. 下载zsh源码</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz</span><br></pre></td></tr></tbody></table></figure><h2 id="2-解压源码"><a href="#2-解压源码" class="headerlink" title="2. 解压源码"></a>2. 解压源码</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf zsh-5.9.tar.xz</span><br></pre></td></tr></tbody></table></figure><h2 id="3-编译安装"><a href="#3-编译安装" class="headerlink" title="3. 编译安装"></a>3. 编译安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 安装编译工具</span><br><span class="line">sudo yum install make automake gcc gcc-c++ kernel-devel</span><br><span class="line">sudo yum install gcc perl-ExtUtils-MakeMaker ncurses-devel -y</span><br><span class="line"></span><br><span class="line"># 进入源码目录</span><br><span class="line">cd zsh-5.9</span><br><span class="line"></span><br><span class="line"># 执行配置 （默认安装在/usr/local/bin/zsh）</span><br><span class="line">./configure</span><br><span class="line"></span><br><span class="line"># 编译和安装</span><br><span class="line">sudo make &amp;&amp; sudo make install</span><br><span class="line"></span><br><span class="line"># 添加信息到/etc/shells</span><br><span class="line">sudo echo "/usr/local/bin/zsh" &gt;&gt; /etc/shells</span><br></pre></td></tr></tbody></table></figure><h2 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 修改默认shell</span><br><span class="line">chsh -s /usr/local/bin/zsh</span><br><span class="line"></span><br><span class="line"># 查看版本</span><br><span class="line">zsh --version</span><br></pre></td></tr></tbody></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> CentOS </tag>
+            
+            <tag> zsh </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hexo常用命令</title>
+      <link href="/posts/33f59116/"/>
+      <url>/posts/33f59116/</url>
+      
+        <content type="html"><![CDATA[<p>记录一下hexo常用命令。<br>须在已安装hexo的环境下执行。</p><h2 id="1-项目命令"><a href="#1-项目命令" class="headerlink" title="1.项目命令"></a>1.项目命令</h2><h3 id="1-1-初始化项目"><a href="#1-1-初始化项目" class="headerlink" title="1.1 初始化项目"></a>1.1 初始化项目</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;project-name&gt;</span><br></pre></td></tr></tbody></table></figure><h3 id="1-2-生成静态文件"><a href="#1-2-生成静态文件" class="headerlink" title="1.2 生成静态文件"></a>1.2 生成静态文件</h3><p>在项目目录下执行：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br></pre></td></tr></tbody></table></figure><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-d, –deploy</td><td>文件生成后立即部署网站</td></tr><tr><td>-w, –watch</td><td>监视文件变动</td></tr><tr><td>-b, –bail</td><td>部署过程中如果有任何错误，就把程序终止并显示错误信息</td></tr><tr><td>-f, –force</td><td>强制重新生成文件</td></tr></tbody></table><h3 id="1-3-清除静态文件"><a href="#1-3-清除静态文件" class="headerlink" title="1.3 清除静态文件"></a>1.3 清除静态文件</h3><p>在项目目录下执行：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br></pre></td></tr></tbody></table></figure><p>清除缓存文件 (db.json) 和已生成的静态文件 (public)。</p><p>在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行该命令。</p><h3 id="1-4-启动服务器"><a href="#1-4-启动服务器" class="headerlink" title="1.4 启动服务器"></a>1.4 启动服务器</h3><p>在项目目录下执行：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo s</span><br></pre></td></tr></tbody></table></figure><p>启动服务器。默认情况下，访问网址为： <a href="http://localhost:4000/%E3%80%82">http://localhost:4000/。</a></p><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-p, –port</td><td>重设端口</td></tr><tr><td>-s, –static</td><td>只使用静态文件</td></tr><tr><td>-l, –log</td><td>启动日志记录，使用覆盖记录格式</td></tr></tbody></table><h3 id="1-5-部署网站"><a href="#1-5-部署网站" class="headerlink" title="1.5 部署网站"></a>1.5 部署网站</h3><p>在项目目录下执行：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></tbody></table></figure><p>部署网站。</p><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-g, –generate</td><td>部署之前预先生成静态文件</td></tr></tbody></table><h2 id="2-文章命令"><a href="#2-文章命令" class="headerlink" title="2.文章命令"></a>2.文章命令</h2><h3 id="2-1-新建文章"><a href="#2-1-新建文章" class="headerlink" title="2.1 新建文章"></a>2.1 新建文章</h3><p>在项目目录下执行：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></tbody></table></figure><p>新建一篇文章。<br>如果没有设置 layout 的话，默认使用 _config.yml 中的 default_layout 参数代替。如果标题包含空格的话，请使用引号括起来。</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new "post title with whitespace"</span><br></pre></td></tr></tbody></table></figure><table><thead><tr><th>参数</th><th>说明</th></tr></thead><tbody><tr><td>-p, –path</td><td>自定义新文章的路径</td></tr><tr><td>-r, –replace</td><td>如果存在同名文章，将其替换</td></tr><tr><td>-s, –slug</td><td>文章的 Slug，作为新文章的文件名和发布后的 URL</td></tr></tbody></table><h2 id="3-结束"><a href="#3-结束" class="headerlink" title="3.结束"></a>3.结束</h2><p>至此，hexo常用命令就记录完了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>安装Butterfly主题并配置</title>
+      <link href="/posts/4f89be81/"/>
+      <url>/posts/4f89be81/</url>
+      
+        <content type="html"><![CDATA[<p>Hexo有非常丰富的主题可供选择：<a href="https://hexo.io/themes/">官方主题页</a>。<br>这边选择了一个个人比较喜欢的主题：<a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a>。</p><h2 id="0-版本"><a href="#0-版本" class="headerlink" title="0.版本"></a>0.版本</h2><p>基于以下环境:</p><blockquote><ul><li>hexo: 6.3.0</li><li>hexo-cli: 4.3.1</li><li>node: v18.16.0</li><li>butterfly: 4.9.0</li></ul></blockquote><h2 id="1-安装主题"><a href="#1-安装主题" class="headerlink" title="1. 安装主题"></a>1. 安装主题</h2><p>安装主题主要有两种方式：npm安装和git安装。(butterfly主题在hexo版本&gt;=5.0.0时才支持npm安装)</p><p>由于实践下来git的安装方式进行github pages部署时会出现一些问题，所以这边选择npm安装。</p><p> <em>※ git安装时把主题作为submodule进行管理，但是部署时却会出现jekyll找不到主题的错误。</em></p><h3 id="1-1-下载主题"><a href="#1-1-下载主题" class="headerlink" title="1.1 下载主题"></a>1.1 下载主题</h3><p>在Hexo项目根目录下执行：</p><ul><li>npm 安装<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-theme-butterfly</span><br></pre></td></tr></tbody></table></figure></li><li>(或者) git 安装<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br></pre></td></tr></tbody></table></figure></li></ul><h3 id="1-2-安装依赖"><a href="#1-2-安装依赖" class="headerlink" title="1.2 安装依赖"></a>1.2 安装依赖</h3><p>该主题需要安装pug 以及 stylus 的渲染器，<br>在Hexo项目根目录下执行：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br></pre></td></tr></tbody></table></figure><h3 id="1-2-应用主题"><a href="#1-2-应用主题" class="headerlink" title="1.2 应用主题"></a>1.2 应用主题</h3><p>修改Hexo项目根目录下的<code>_config.yml</code>文件，将<code>theme</code>修改为：</p><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: butterfly</span><br></pre></td></tr></tbody></table></figure><h2 id="2-配置主题"><a href="#2-配置主题" class="headerlink" title="2. 配置主题"></a>2. 配置主题</h2><p>主题的配置文件在<code>themes/butterfly/_config.yml</code>中。(此文件请勿删除)</p><p>由于git拉取代码的升级方式会覆盖该配置文件，为了不影响升级，可以将配置项复制到Hexo项目根目录下的<code>_config.butterfly.yml</code>中。</p><p>Hexo会自动合并根目录下的<code>_config.butterfly.yml</code>和主题目录下的<code>_config.yml</code>，所以可以只在根目录下的<code>_config.butterfly.yml</code>中修改配置项即可。(同一配置项，根目录下的优先级高于主题目录下的)</p><h3 id="2-1-具体配置项"><a href="#2-1-具体配置项" class="headerlink" title="2.1 具体配置项"></a>2.1 具体配置项</h3><p>具体配置项请参考：<a href="https://butterfly.js.org/posts/4aa8abbe/">Butterfly 安裝文檔(三) 主題配置-1</a></p><h2 id="3-Github-Pages部署配置-若非部署到GitHub-pages的话不用操作"><a href="#3-Github-Pages部署配置-若非部署到GitHub-pages的话不用操作" class="headerlink" title="3.Github Pages部署配置(若非部署到GitHub pages的话不用操作)"></a>3.Github Pages部署配置(若非部署到GitHub pages的话不用操作)</h2><p>在Hexo项目根目录下创建一个名为”.nojekyll”的文件，<br>用来防止github pages把项目当成jekyll来处理。</p><h2 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h2><p>至此，Hexo的主题安装和配置就完成了。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Hexo </tag>
+            
+            <tag> 主题 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>

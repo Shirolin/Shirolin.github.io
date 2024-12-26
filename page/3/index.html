@@ -1,0 +1,287 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>希落凛 - 希落凛の個人サイト</title><meta name="author" content="Shirolin"><meta name="copyright" content="Shirolin"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="记录一些碎碎念">
+<meta property="og:type" content="website">
+<meta property="og:title" content="希落凛">
+<meta property="og:url" content="https://shirolin.github.io/page/3/index.html">
+<meta property="og:site_name" content="希落凛">
+<meta property="og:description" content="记录一些碎碎念">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shirolin.github.io/img/avatar_256.png">
+<meta property="article:author" content="Shirolin">
+<meta property="article:tag" content="希落凛">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shirolin.github.io/img/avatar_256.png"><link rel="shortcut icon" href="/img/avatar.png"><link rel="canonical" href="https://shirolin.github.io/page/3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0026a02b4775efd578ec7edc9f9fc627";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-1YK7SHGXTR"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-1YK7SHGXTR')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-1YK7SHGXTR', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":200,"languages":{"author":"作者: Shirolin","link":"链接: ","source":"来源: 希落凛","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '希落凛',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (false) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar_256.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/xenoblade3.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">希落凛</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">希落凛</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/Shirolin" target="_blank" title="Github"><i class="fab fa-github" style="color: #0d8686;"></i></a><a class="social-icon" href="mailto:shirolin.com@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #0d8686;"></i></a><a class="social-icon" href="/linwangzhe@qq.com" target="_blank" title="Weibo"><i class="fa-brands fa-weibo" style="color: #0d8686;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/a8a8e99/" title="Windows终端的美化、易用化改造">Windows终端的美化、易用化改造</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-04-01T05:39:13.000Z" title="发表于 2024-04-01 13:39:13">2024-04-01</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.295Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%BE%8E%E5%8C%96/">美化</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Windows/">Windows</a></span></div><div class="content">用来记录Windows平台Terminal终端的美化、易用化改造过程。目标：以安装Oh My Posh(v3)和主题来美化，加入posh-git来增强终端补全、历史记录等功能，最终实现一个美观、易用的终端。平台：Windows 10|11 1. 安装Windows Terminal微软商店搜索Windows Terminal，安装即可。 2. 使用管理员权限启动Windows Terminal并允许执行脚本1Set-ExecutionPolicy RemoteSigned -Scope CurrentUser  3. 升级PowerShell Core1winget install Microsoft.PowerShell  4. 安装Oh My Posh1winget install JanDeDobbeleer.OhMyPosh -s winget  5. 安装posh-git1Install-Module posh-git -Scope CurrentUser -Force  6. 配置PowerShell12345# 判断是否存在配置文件，不存在则创建if...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/52028/" title="尝试用Hexo搭建博客">尝试用Hexo搭建博客</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-12-18T08:15:45.000Z" title="发表于 2023-12-18 16:15:45">2023-12-18</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.339Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Hexo/">Hexo</a></span></div><div class="content">第一篇博客，用来记录Hexo的搭建过程。 1. 安装Hexo安装Hexo的过程很简单，按照官方教程一步一步来就可以了。 1npm install -g hexo-cli  2. 初始化项目123hexo init &lt;project-name&gt;cd &lt;project-name&gt;npm install  3. 部署到GitHub Pages3.1 创建仓库在GitHub上创建一个仓库，仓库名为&lt;username&gt;.github.io，其中&lt;username&gt;为你的GitHub用户名。 3.2 配置ssh密钥※ 若已配置过ssh密钥，可跳过此步骤。 在本地生成ssh密钥： 1ssh-keygen -t rsa -C "用户名@example.com"  将生成的公钥~/.ssh/id_rsa.pub添加到GitHub的SSH Keys中： https://github.com/settings/keys 3.3 配置项目修改Hexo项目根目录下的_config.yml文件，将deploy部分修改为： 1234deploy:  type:...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/ed80609d/" title="Linux安装nvm与node.js">Linux安装nvm与node.js</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-30T07:45:26.000Z" title="发表于 2023-07-30 15:45:26">2023-07-30</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.258Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Linux/">Linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/nvm/">nvm</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/node/">node</a></span></div><div class="content">记录一下安装nvm的过程。平台：CentOS7 | Ubuntu 20.04 1. 安装nvmcurl方式： 1curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash  wget方式： 1wget -qO- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash  git clone方式： 1git clone git://github.com/creationix/nvm.git ~/nvm   2. 配置环境变量默认安装在~/.nvm目录下，并已经配置好环境变量，如果没有配置，需要手动配置环境变量。 根据自己的shell类型，修改对应的配置文件，添加如下内容： bash： 1234vi ~/.bashrcexport NVM_DIR="$HOME/.nvm"[ -s "$NVM_DIR/nvm.sh" ] &amp;&amp; \. "$NVM_DIR/nvm.sh" #...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/b0c9ad69/" title="Linux 终端美化">Linux 终端美化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-27T05:26:33.000Z" title="发表于 2023-07-27 13:26:33">2023-07-27</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.262Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Linux/">Linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%BE%8E%E5%8C%96/">美化</a></span></div><div class="content">用来记录一些终端美化的方法。平台：CentOS 7.6|Ubuntu 20.04 1. 安装zshubuntu 1sudo apt install zsh -y  ※ CentOS 安装高版本zsh请参考《centos 安装高版本zsh》 2. 安装Oh My Zsh1sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"  3. 安装相关插件12345678910111213# 语法高亮插件:zsh-syntax-highlightinggit clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting# 命令提示插件:zsh-autosuggestionsgit clone https://github.com/zsh-users/zsh-autosuggestions.git...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/d7590978/" title="centos 安装高版本zsh">centos 安装高版本zsh</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-27T03:30:46.000Z" title="发表于 2023-07-27 11:30:46">2023-07-27</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.295Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Linux/">Linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CentOS/">CentOS</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/zsh/">zsh</a></span></div><div class="content">Centos自带的yum源中，zsh已长期停留在5.0版本，而目前最新版本已经到了5.9，所以需要手动安装高版本的zsh。 1. 下载zsh源码1wget https://sourceforge.net/projects/zsh/files/zsh/5.9/zsh-5.9.tar.xz  2. 解压源码1tar -xvf zsh-5.9.tar.xz  3. 编译安装123456789101112131415# 安装编译工具sudo yum install make automake gcc gcc-c++ kernel-develsudo yum install gcc perl-ExtUtils-MakeMaker ncurses-devel -y# 进入源码目录cd zsh-5.9# 执行配置 （默认安装在/usr/local/bin/zsh）./configure# 编译和安装sudo make &amp;&amp; sudo make install# 添加信息到/etc/shellssudo echo "/usr/local/bin/zsh" &gt;&gt;...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/33f59116/" title="Hexo常用命令">Hexo常用命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-25T08:35:51.000Z" title="发表于 2023-07-25 16:35:51">2023-07-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.260Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Hexo/">Hexo</a></span></div><div class="content">记录一下hexo常用命令。须在已安装hexo的环境下执行。 1.项目命令1.1 初始化项目1hexo init &lt;project-name&gt;  1.2 生成静态文件在项目目录下执行： 1hexo g     参数 说明    -d, –deploy 文件生成后立即部署网站   -w, –watch 监视文件变动   -b, –bail 部署过程中如果有任何错误，就把程序终止并显示错误信息   -f, –force 强制重新生成文件   1.3 清除静态文件在项目目录下执行： 1hexo clean 清除缓存文件 (db.json) 和已生成的静态文件 (public)。 在某些情况（尤其是更换主题后），如果发现您对站点的更改无论如何也不生效，您可能需要运行该命令。 1.4 启动服务器在项目目录下执行： 1hexo s 启动服务器。默认情况下，访问网址为： http://localhost:4000/。    参数 说明    -p, –port 重设端口   -s, –static 只使用静态文件   -l, –log 启动日志记录，使用覆盖记录格式   1.5...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/posts/4f89be81/" title="安装Butterfly主题并配置">安装Butterfly主题并配置</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-07-25T08:15:45.000Z" title="发表于 2023-07-25 16:15:45">2023-07-25</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-22T09:15:04.328Z" title="更新于 2024-12-22 17:15:04">2024-12-22</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/">技术文</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Hexo/">Hexo</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E4%B8%BB%E9%A2%98/">主题</a></span></div><div class="content">Hexo有非常丰富的主题可供选择：官方主题页。这边选择了一个个人比较喜欢的主题：Butterfly。 0.版本基于以下环境:   hexo: 6.3.0 hexo-cli: 4.3.1 node: v18.16.0 butterfly: 4.9.0   1. 安装主题安装主题主要有两种方式：npm安装和git安装。(butterfly主题在hexo版本&gt;=5.0.0时才支持npm安装) 由于实践下来git的安装方式进行github pages部署时会出现一些问题，所以这边选择npm安装。  ※ git安装时把主题作为submodule进行管理，但是部署时却会出现jekyll找不到主题的错误。 1.1 下载主题在Hexo项目根目录下执行：  npm 安装1npm i hexo-theme-butterfly (或者) git 安装1git clone -b master https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly  1.2 安装依赖该主题需要安装pug 以及 stylus...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/2/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#content-inner">2</a><span class="page-number current">3</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar_256.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Shirolin</div><div class="author-info-description">记录一些碎碎念</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">27</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">49</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Shirolin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Shirolin" target="_blank" title="Github"><i class="fab fa-github" style="color: #0d8686;"></i></a><a class="social-icon" href="mailto:shirolin.com@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #0d8686;"></i></a><a class="social-icon" href="/linwangzhe@qq.com" target="_blank" title="Weibo"><i class="fa-brands fa-weibo" style="color: #0d8686;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">拖延症……</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/ad2e0fa7/" title="Laravel开发必备：laravel-ide-helper">Laravel开发必备：laravel-ide-helper</a><time datetime="2024-12-26T09:18:42.000Z" title="发表于 2024-12-26 17:18:42">2024-12-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/b2ff1374/" title="安装并设置GKD">安装并设置GKD</a><time datetime="2024-12-10T01:37:52.000Z" title="发表于 2024-12-10 09:37:52">2024-12-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/d9e2c7a1/" title="定时更新hosts">定时更新hosts</a><time datetime="2024-11-22T08:29:11.000Z" title="发表于 2024-11-22 16:29:11">2024-11-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/3e2f131b/" title="刮削nfo常用源的网址">刮削nfo常用源的网址</a><time datetime="2024-08-16T08:00:39.000Z" title="发表于 2024-08-16 16:00:39">2024-08-16</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/7a97a78f/" title="隐藏docker命令debug提示信息">隐藏docker命令debug提示信息</a><time datetime="2024-08-06T03:25:07.000Z" title="发表于 2024-08-06 11:25:07">2024-08-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%BD%B1%E9%9F%B3%E5%A8%B1%E4%B9%90/"><span class="card-category-list-name">影音娱乐</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87/"><span class="card-category-list-name">技术文</span><span class="card-category-list-count">23</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Linux/" style="font-size: 1.3em; color: rgb(113, 50, 50);">Linux</a><a href="/tags/nvm/" style="font-size: 1.15em; color: rgb(128, 112, 57);">nvm</a><a href="/tags/node/" style="font-size: 1.15em; color: rgb(96, 96, 105);">node</a><a href="/tags/Hexo/" style="font-size: 1.38em; color: rgb(173, 119, 157);">Hexo</a><a href="/tags/%E5%9B%BE%E7%89%87/" style="font-size: 1.15em; color: rgb(103, 50, 99);">图片</a><a href="/tags/Laravel/" style="font-size: 1.15em; color: rgb(146, 81, 171);">Laravel</a><a href="/tags/PHP/" style="font-size: 1.15em; color: rgb(88, 196, 57);">PHP</a><a href="/tags/%E7%BC%96%E7%A8%8B/" style="font-size: 1.15em; color: rgb(121, 125, 50);">编程</a><a href="/tags/laravel/" style="font-size: 1.15em; color: rgb(50, 50, 188);">laravel</a><a href="/tags/ide/" style="font-size: 1.15em; color: rgb(50, 50, 50);">ide</a><a href="/tags/%E6%95%99%E7%A8%8B/" style="font-size: 1.45em; color: rgb(50, 55, 88);">教程</a><a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 1.15em; color: rgb(50, 54, 119);">开发</a><a href="/tags/%E7%BE%8E%E5%8C%96/" style="font-size: 1.3em; color: rgb(112, 126, 50);">美化</a><a href="/tags/Pixel/" style="font-size: 1.3em; color: rgb(50, 50, 51);">Pixel</a><a href="/tags/%E6%89%8B%E6%9C%BA/" style="font-size: 1.3em; color: rgb(173, 148, 50);">手机</a><a href="/tags/Root/" style="font-size: 1.15em; color: rgb(146, 180, 57);">Root</a><a href="/tags/%E5%88%B7%E6%9C%BA/" style="font-size: 1.22em; color: rgb(179, 185, 81);">刷机</a><a href="/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/" style="font-size: 1.15em; color: rgb(50, 114, 124);">软路由</a><a href="/tags/WSL/" style="font-size: 1.15em; color: rgb(120, 200, 50);">WSL</a><a href="/tags/%E4%BB%A3%E7%90%86/" style="font-size: 1.15em; color: rgb(140, 50, 50);">代理</a><a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 1.22em; color: rgb(184, 104, 135);">网络</a><a href="/tags/Windows/" style="font-size: 1.22em; color: rgb(50, 155, 81);">Windows</a><a href="/tags/CentOS/" style="font-size: 1.15em; color: rgb(84, 132, 57);">CentOS</a><a href="/tags/zsh/" style="font-size: 1.15em; color: rgb(198, 50, 196);">zsh</a><a href="/tags/Navicat/" style="font-size: 1.15em; color: rgb(68, 50, 195);">Navicat</a><a href="/tags/Android/" style="font-size: 1.3em; color: rgb(82, 138, 50);">Android</a><a href="/tags/%E5%BA%94%E7%94%A8/" style="font-size: 1.15em; color: rgb(167, 85, 85);">应用</a><a href="/tags/chrome/" style="font-size: 1.15em; color: rgb(50, 113, 198);">chrome</a><a href="/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/" style="font-size: 1.15em; color: rgb(135, 132, 78);">浏览器</a><a href="/tags/%E6%89%A9%E5%B1%95/" style="font-size: 1.15em; color: rgb(85, 156, 188);">扩展</a><a href="/tags/%E6%8F%92%E4%BB%B6/" style="font-size: 1.15em; color: rgb(178, 55, 171);">插件</a><a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.15em; color: rgb(50, 50, 50);">运维</a><a href="/tags/%E7%BD%91%E7%AB%99/" style="font-size: 1.15em; color: rgb(157, 50, 71);">网站</a><a href="/tags/%E8%AF%81%E4%B9%A6/" style="font-size: 1.15em; color: rgb(69, 177, 50);">证书</a><a href="/tags/%E8%A7%86%E9%A2%91/" style="font-size: 1.22em; color: rgb(148, 76, 165);">视频</a><a href="/tags/%E8%B5%84%E6%BA%90/" style="font-size: 1.22em; color: rgb(119, 57, 50);">资源</a><a href="/tags/%E5%88%AE%E5%89%8A/" style="font-size: 1.15em; color: rgb(166, 181, 52);">刮削</a><a href="/tags/%E6%BC%AB%E7%94%BB/" style="font-size: 1.15em; color: rgb(50, 165, 79);">漫画</a><a href="/tags/%E5%BD%B1%E9%9F%B3/" style="font-size: 1.15em; color: rgb(177, 148, 50);">影音</a><a href="/tags/%E9%98%85%E8%AF%BB/" style="font-size: 1.15em; color: rgb(84, 106, 50);">阅读</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/12/">
+          <span class="card-archive-list-date">十二月 2024</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/11/">
+          <span class="card-archive-list-date">十一月 2024</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/08/">
+          <span class="card-archive-list-date">八月 2024</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/07/">
+          <span class="card-archive-list-date">七月 2024</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/06/">
+          <span class="card-archive-list-date">六月 2024</span>
+          <span class="card-archive-list-count">3</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/05/">
+          <span class="card-archive-list-date">五月 2024</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/04/">
+          <span class="card-archive-list-date">四月 2024</span>
+          <span class="card-archive-list-count">9</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/12/">
+          <span class="card-archive-list-date">十二月 2023</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">27</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">15.7k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-12-26T12:33:12.016Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Shirolin</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">よこそ, 我が <a target="_blank" rel="noopener" href="https://butterfly.js.org/">ブログ</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["人を信じよ、しかしその百倍も自らを信じよ。","人间っていうのは、いい时にはみんないい人なんだよ。最悪の状态の时にその人の本质が问われるんだ。","すべての终（お）わりは新（あら）たなる始（はじ）まりである。","太阳（たいよう）が辉（かがや）くかぎり、希望（きぼう）もまた辉く。"])
+  } else {
+    document.getElementById("subtitle").textContent = "人を信じよ、しかしその百倍も自らを信じよ。"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
