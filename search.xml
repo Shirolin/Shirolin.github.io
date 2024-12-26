@@ -4,6 +4,43 @@
   
     
     <entry>
+      <title>Laravel中Redis的配置及使用</title>
+      <link href="/posts/29318e15/"/>
+      <url>/posts/29318e15/</url>
+      
+        <content type="html"><![CDATA[<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Laravel的缓存系统提供了多种驱动，其中Redis是最常用的一种。<br>Session、缓存、队列等都可以使用Redis来存储。</p><h1 id="在Laravel中配置Redis"><a href="#在Laravel中配置Redis" class="headerlink" title="在Laravel中配置Redis"></a>在Laravel中配置Redis</h1><p>安装Redis扩展</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer require predis/predis</span><br></pre></td></tr></tbody></table></figure><p>在<code>.env</code>文件中配置Redis</p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">REDIS_HOST=127.0.0.1</span><br><span class="line">REDIS_PASSWORD=null</span><br><span class="line">REDIS_PORT=6379</span><br></pre></td></tr></tbody></table></figure><p>在<code>config/database.php</code>文件中配置Redis</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'redis'</span> =&gt; [</span><br><span class="line">    <span class="string">'client'</span> =&gt; <span class="string">'predis'</span>,</span><br><span class="line">    <span class="string">'default'</span> =&gt; [</span><br><span class="line">        <span class="string">'host'</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">'REDIS_HOST'</span>, <span class="string">'127.0.0.1'</span>),</span><br><span class="line">        <span class="string">'password'</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">'REDIS_PASSWORD'</span>, <span class="literal">null</span>),</span><br><span class="line">        <span class="string">'port'</span> =&gt; <span class="title function_ invoke__">env</span>(<span class="string">'REDIS_PORT'</span>, <span class="number">6379</span>),</span><br><span class="line">        <span class="string">'database'</span> =&gt; <span class="number">0</span>,</span><br><span class="line">    ],</span><br><span class="line">],</span><br></pre></td></tr></tbody></table></figure><p>在<code>.env</code>文件中，将<code>CACHE_DRIVER</code>、<code>SESSION_DRIVER</code>和<code>QUEUE_CONNECTION</code>的值设置为<code>redis</code></p><figure class="highlight shell"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">CACHE_DRIVER=redis</span><br><span class="line">SESSION_DRIVER=redis</span><br><span class="line">QUEUE_CONNECTION=redis</span><br></pre></td></tr></tbody></table></figure><h1 id="使用Redis"><a href="#使用Redis" class="headerlink" title="使用Redis"></a>使用Redis</h1><p>这样配置好之后，在Laravel中使用Cache、Session、Queue等功能时，就会自动使用Redis作为存储。</p><p>如果需要直接使用Redis，可以通过<code>Redis</code>门面来操作Redis。</p><figure class="highlight php"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">use</span> <span class="title">Illuminate</span>\<span class="title">Support</span>\<span class="title">Facades</span>\<span class="title">Redis</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置值</span></span><br><span class="line"><span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(<span class="string">'name'</span>, <span class="string">'Taylor'</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取值</span></span><br><span class="line"><span class="variable">$name</span> = <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="string">'name'</span>);</span><br></pre></td></tr></tbody></table></figure><h1 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h1><p>这样就完成了Laravel中Redis的配置及使用。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 技术文 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> laravel </tag>
+            
+            <tag> redis </tag>
+            
+            <tag> cache </tag>
+            
+            <tag> session </tag>
+            
+            <tag> queue </tag>
+            
+            <tag> 教程 </tag>
+            
+            <tag> 开发 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Laravel开发必备：laravel-ide-helper</title>
       <link href="/posts/ad2e0fa7/"/>
       <url>/posts/ad2e0fa7/</url>
@@ -22,11 +59,11 @@
             
             <tag> laravel </tag>
             
-            <tag> ide </tag>
-            
             <tag> 教程 </tag>
             
             <tag> 开发 </tag>
+            
+            <tag> ide </tag>
             
         </tags>
       
