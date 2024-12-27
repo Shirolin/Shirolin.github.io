@@ -2,7 +2,12 @@
 title: Laravel 日志按天分割
 abbrlink: 58b1f99
 date: 2024-12-27 19:10:28
+categories: 技术文
 tags:
+  - laravel
+  - 日志
+  - 教程
+  - 开发
 ---
 
 # 背景
