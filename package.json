@@ -3,10 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "hexo generate",
+    "generate": "hexo generate",
+    "build": "npm run format && npm run lint && npm run tsc && npm run generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
-    "server": "hexo server"
+    "server": "hexo server",
+    "format": "prettier --write \"**/*.{js,ts,css,md,json}\"",
+    "lint": "eslint . --fix",
+    "tsc": "tsc"
   },
   "hexo": {
     "version": "8.1.1"
@@ -30,5 +34,13 @@
     "hexo-theme-butterfly": "^5.5.4",
     "hexo-theme-landscape": "^1.0.0",
     "hexo-wordcount": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.2",
+    "typescript": "^6.0.2"
   }
 }
