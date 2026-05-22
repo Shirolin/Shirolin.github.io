@@ -2,14 +2,17 @@
   "name": "hexo-site",
   "version": "0.0.0",
   "private": true,
+  "packageManager": "npm@10.9.2",
   "scripts": {
     "generate": "hexo generate",
-    "build": "npm run format && npm run lint && npm run tsc && npm run generate",
+    "build": "npm run format:check && npm run lint && npm run tsc && npm run generate",
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server",
     "format": "prettier --write \"**/*.{js,ts,css,md,json}\"",
-    "lint": "eslint . --fix",
+    "format:check": "prettier --check \"**/*.{js,ts,css,md,json}\"",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "tsc": "tsc"
   },
   "hexo": {
