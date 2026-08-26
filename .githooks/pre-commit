@@ -1,0 +1,21 @@
+#!/bin/sh
+# 提交前关卡：staged 文件格式化 + lint，全量类型检查。
+set -e
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$STAGED" ] && exit 0
+
+FORMATTABLE=$(printf '%s\n' "$STAGED" | grep -E '\.(js|ts|css|md|json)$' || true)
+LINTABLE=$(printf '%s\n' "$STAGED" | grep -E '\.(js|ts)$' || true)
+
+if [ -n "$FORMATTABLE" ]; then
+  printf '%s\n' "$FORMATTABLE" | xargs npx prettier --write
+  printf '%s\n' "$FORMATTABLE" | xargs git add --
+fi
+
+if [ -n "$LINTABLE" ]; then
+  printf '%s\n' "$LINTABLE" | xargs npx eslint --fix --no-warn-ignored
+  printf '%s\n' "$LINTABLE" | xargs git add --
+fi
+
+npm run tsc
