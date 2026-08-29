@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# A simple mock hexo that fails if the environment variable HEXO_SHOULD_FAIL is set
+if [[ -n "$HEXO_SHOULD_FAIL" ]]; then
+  echo "Mock hexo: simulated failure" >&2
+  exit 1
+fi
+
+echo "Mock hexo: success"
+exit 0
