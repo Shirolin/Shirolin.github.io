@@ -1,3 +1,5 @@
+# Build and deploy Hexo site to GitHub Pages (replaces legacy deploy.yml).
+# Uses actions/checkout@v4 and actions/setup-node@v4 (npm cache via setup-node; no separate actions/cache step).
 name: Build and deploy Pages
 
 on:
