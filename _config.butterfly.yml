@@ -490,8 +490,8 @@ twikoo:
 # Never commit OAuth client secrets; Giscus only needs public repo/category IDs.
 giscus:
   repo: Shirolin/Shirolin.github.io
-  repo_id: # Required: from giscus.app configuration (e.g. R_kgDO...)
-  category_id: # Required: from giscus.app configuration (e.g. DIC_kwDO...)
+  repo_id: R_kgDOJ7cwrQ
+  category_id: DIC_kwDOJ7cwrc4DFWWs
   light_theme: light
   dark_theme: dark
   option:
@@ -499,7 +499,7 @@ giscus:
     data-mapping: pathname
     data-strict: '0'
     data-input-position: bottom
-    data-category: General # Must match the Discussions category name in your repo
+    data-category: Announcements
 
 # Remark42
 # https://remark42.com/docs/configuration/frontend/
